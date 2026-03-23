@@ -1,0 +1,70 @@
+// ──────────────────────────────────────────────
+//  黑海岸·守望站  —  Prisma Schema
+//  数据库：SQLite（本地轻量索引）
+// ──────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// 笔记索引表（物理文件存储在 /notes/*.md）
+model Note {
+  id          String   @id @default(cuid())
+  slug        String   @unique          // 文件名（不含 .md）
+  title       String
+  summary     String?                   // AI 摘要（后续阶段）
+  tags        String   @default("[]")  // JSON 数组序列化
+  domain      String?                   // 所属领域
+  filePath    String                    // 物理路径
+  wordCount   Int      @default(0)
+  readingMins Int      @default(0)
+  isMastered  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 关联：笔记 <-> 技能节点（多对多，Phase 2）
+  skills SkillNote[]
+}
+
+// 技能 / Roadmap 节点
+model Skill {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  domain      String                     // 领域分类
+  description String?
+  level       Int         @default(0)   // 0=未开始 1=学习中 2=掌握 3=精通
+  orderIndex  Int         @default(0)
+  parentId    String?                   // 父节点（构成树形 Roadmap）
+  parent      Skill?      @relation("SkillTree", fields: [parentId], references: [id])
+  children    Skill[]     @relation("SkillTree")
+  notes       SkillNote[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+// 笔记-技能 中间表
+model SkillNote {
+  noteId  String
+  skillId String
+  note    Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  skill   Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([noteId, skillId])
+}
+
+// 学习记录（用于统计热力图和连击天数）
+model StudyLog {
+  id        String   @id @default(cuid())
+  date      String                       // YYYY-MM-DD
+  duration  Int      @default(0)        // 分钟
+  noteId    String?
+  tags      String   @default("[]")
+  createdAt DateTime @default(now())
+
+  @@unique([date])
+}
+

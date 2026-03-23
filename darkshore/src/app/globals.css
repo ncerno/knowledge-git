@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+/* ─── 守岸人主题调色板 ─── */
+@theme inline {
+  /* 核心背景色 */
+  --color-shore-void:       #0a0f1d;
+  --color-shore-deep:       #0d1526;
+  --color-shore-surface:    #111827;
+  --color-shore-panel:      #0f1c35;
+
+  /* 青色数据流荧光 */
+  --color-cyan-glow:        #00e5ff;
+  --color-cyan-soft:        #22d3ee;
+  --color-cyan-muted:       #0891b2;
+  --color-cyan-dim:         #164e63;
+
+  /* 蓝色层次 */
+  --color-blue-bright:      #3b82f6;
+  --color-blue-mid:         #1d4ed8;
+  --color-blue-deep:        #1e3a5f;
+
+  /* 中性白/灰 */
+  --color-white-pure:       #ffffff;
+  --color-white-soft:       rgba(255,255,255,0.85);
+  --color-white-muted:      rgba(255,255,255,0.5);
+  --color-white-dim:        rgba(255,255,255,0.1);
+
+  /* 字体 */
+  --font-display: "Inter", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+}
+
+/* ─── 全局重置 ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+html, body {
+  height: 100%;
+  background-color: #0a0f1d;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: "Inter", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ─── 磨砂玻璃工具类 ─── */
+.glass {
+  background: rgba(13, 21, 38, 0.65);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-hover {
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-hover:hover {
+  background: rgba(0, 229, 255, 0.06);
+  border-color: rgba(0, 229, 255, 0.25);
+  box-shadow: 0 0 24px rgba(0, 229, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* ─── 青色荧光文字 ─── */
+.text-glow-cyan {
+  color: #00e5ff;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.6), 0 0 30px rgba(0, 229, 255, 0.2);
+}
+
+/* ─── 滚动条美化 ─── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.3); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,229,255,0.6); }
+
+/* ─── 选中高亮 ─── */
+::selection {
+  background: rgba(0, 229, 255, 0.25);
+  color: #ffffff;
+}
+
+/* ─── DataWave 动画关键帧 ─── */
+@keyframes wave-bar {
+  0%, 100% { transform: scaleY(0.3); opacity: 0.4; }
+  50%       { transform: scaleY(1.0); opacity: 1.0; }
+}
+
+@keyframes petal-drift {
+  0%   { transform: translateY(-10px) translateX(0px) rotate(0deg);   opacity: 0; }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(110vh) translateX(60px) rotate(720deg); opacity: 0; }
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50%       { opacity: 1.0; transform: scale(1.4); }
+}
+
+@keyframes breath-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1.0; transform: scale(1.02); }
+}
+
+@keyframes scan-line {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  10%  { opacity: 0.4; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
