@@ -1,28 +1,39 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Orbit, Telescope } from "lucide-react";
-import GlassCard from "@/components/GlassCard";
 import Sidebar from "@/components/Sidebar";
 import KnowledgeGraph from "@/components/KnowledgeGraph";
 import GlobalSearch from "@/components/GlobalSearch";
 import ChatPanel from "@/components/ChatPanel";
-import { domainMeta, getDomainProgress, initialRoadmaps, type NodeCategory } from "@/lib/data/initialRoadmaps";
+import Heatmap from "@/components/Heatmap";
+import SyncRadar from "@/components/SyncRadar";
+import RecentSignals from "@/components/RecentSignals";
+import { domainMeta, initialRoadmaps, type NodeCategory } from "@/lib/data/initialRoadmaps";
+
+interface StatsData {
+  heatmap: Record<string, number>;
+  radar: Record<string, number>;
+  recentNotes: { id: string; title: string; createdAt: string; wordCount: number; node?: { id: string; title: string; category: string } | null }[];
+  litNodes: string[];
+  totalNotes: number;
+}
 
 export default function HomePage() {
   const [activeDomain, setActiveDomain] = useState<NodeCategory>("frontend");
   const [highlightNodeId, setHighlightNodeId] = useState<string | null>(null);
   const [litNodeIds, setLitNodeIds] = useState<string[]>([]);
+  const [stats, setStats] = useState<StatsData | null>(null);
 
-  const stats = useMemo(() => {
-    const total = initialRoadmaps.filter((node) => node.depth > 0).length;
-    const completed = initialRoadmaps.filter((node) => node.status === "completed").length;
-    const available = initialRoadmaps.filter((node) => node.status === "available").length;
-    return { total, completed, available };
+  useEffect(() => {
+    fetch("/api/stats").then(r => r.json()).then(d => setStats(d)).catch(() => {});
   }, []);
 
-  const activeProgress = getDomainProgress(activeDomain);
+  const nodeStats = useMemo(() => {
+    const total = initialRoadmaps.filter(n => n.depth > 0).length;
+    const notedCount = stats?.litNodes.length || 0;
+    return { total, notedCount };
+  }, [stats]);
 
   const handleNavigateNode = useCallback((nodeId: string, category: NodeCategory) => {
     setActiveDomain(category);
@@ -30,88 +41,63 @@ export default function HomePage() {
     setTimeout(() => setHighlightNodeId(null), 3000);
   }, []);
 
-  const handleTaskCompleteLitNode = useCallback((relatedNodeId: string) => {
-    setLitNodeIds((prev) => [...prev, relatedNodeId]);
-    setTimeout(() => {
-      setLitNodeIds((prev) => prev.filter((id) => id !== relatedNodeId));
-    }, 4000);
-  }, []);
-
   return (
     <div className="flex h-screen overflow-hidden">
-      <Sidebar activeDomain={activeDomain} onSelectDomain={setActiveDomain} onTaskComplete={handleTaskCompleteLitNode} />
+      <Sidebar activeDomain={activeDomain} onSelectDomain={setActiveDomain} />
 
-      <div className="flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto p-6 md:p-8">
-        {/* 顶部栏 */}
+      <div className="flex min-w-0 flex-1 flex-col gap-5 overflow-y-auto p-5 lg:p-7">
         <div className="flex items-center justify-between gap-4">
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-            <p className="mb-1 text-[10px] font-mono uppercase tracking-[0.32em] text-cyan-300/70">
+            <p className="mb-1 font-mono text-[11px] uppercase tracking-[0.3em] text-cyan-300/55">
               Darkshore · Knowledge Observatory
             </p>
-            <h1 className="text-2xl font-bold text-white/90 md:text-3xl">
+            <h1 className="text-[26px] font-bold tracking-tight text-white/92 lg:text-[30px]">
               黑海岸 · 守望站
             </h1>
           </motion.div>
           <div className="flex items-center gap-3">
             <GlobalSearch onNavigateNode={handleNavigateNode} />
-            <GlassCard padding="px-3 py-2" className="hidden lg:block">
-              <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-cyan-300/60">
-                <Telescope size={11} /> {domainMeta[activeDomain].label}
-                <span className="ml-1 text-white/40">{activeProgress.completed}/{activeProgress.total}</span>
-              </div>
-            </GlassCard>
+            <div className="hidden items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.03] px-4 py-2 backdrop-blur-md lg:flex">
+              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-cyan-300/50">{domainMeta[activeDomain].label}</span>
+              <span className="text-[11px] text-white/30">{nodeStats.notedCount}/{nodeStats.total} 已点亮</span>
+            </div>
           </div>
         </div>
 
-        {/* 主内容区 */}
-        <div className="grid flex-1 grid-cols-1 gap-4 xl:grid-cols-3">
-          <GlassCard accentBar padding="p-4" className="xl:col-span-2">
-            <KnowledgeGraph
-              activeDomain={activeDomain}
-              highlightNodeId={highlightNodeId}
-              litNodeIds={litNodeIds}
-            />
-          </GlassCard>
+        <div className="relative flex-1" style={{ minHeight: "420px" }}>
+          <KnowledgeGraph
+            activeDomain={activeDomain}
+            highlightNodeId={highlightNodeId}
+            litNodeIds={litNodeIds}
+            notedNodeIds={stats?.litNodes || []}
+          />
+        </div>
 
-          <div className="flex flex-col gap-3">
-            <GlassCard padding="p-4">
-              <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-cyan-300/65">
-                <Orbit size={12} /> 星海统计
-              </div>
-              <div className="mt-4 grid grid-cols-3 gap-3 text-center">
-                <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-                  <p className="text-2xl font-bold text-white/90">{stats.total}</p>
-                  <p className="mt-1 text-[11px] text-white/40">总节点</p>
-                </div>
-                <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/[0.04] p-3">
-                  <p className="text-2xl font-bold text-cyan-300">{stats.available}</p>
-                  <p className="mt-1 text-[11px] text-white/40">已解锁</p>
-                </div>
-                <div className="rounded-2xl border border-emerald-400/15 bg-emerald-400/[0.04] p-3">
-                  <p className="text-2xl font-bold text-emerald-300">{stats.completed}</p>
-                  <p className="mt-1 text-[11px] text-white/40">已完成</p>
-                </div>
-              </div>
-            </GlassCard>
-
-            {/* 当前焦点域描述 */}
-            <GlassCard accentBar padding="p-4">
-              <p className="text-xs font-medium text-white/80">{domainMeta[activeDomain].label}</p>
-              <p className="mt-1 text-[11px] text-white/40 leading-5">{domainMeta[activeDomain].description}</p>
-              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/8">
-                <motion.div
-                  className="h-full rounded-full bg-gradient-to-r from-cyan-300 to-blue-400"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${activeProgress.ratio * 100}%` }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                />
-              </div>
-            </GlassCard>
-          </div>
+        <div className="flex gap-3">
+          {[
+            { label: "总节点", value: nodeStats.total, color: "text-white/80" },
+            { label: "已点亮", value: nodeStats.notedCount, color: "text-cyan-300" },
+            { label: "笔记数", value: stats?.totalNotes || 0, color: "text-cyan-300" },
+          ].map(s => (
+            <div key={s.label} className="flex-1 rounded-2xl border border-white/[0.05] bg-white/[0.02] px-4 py-3 text-center backdrop-blur-sm">
+              <p className={`text-xl font-bold ${s.color}`}>{s.value}</p>
+              <p className="mt-0.5 text-[11px] text-white/30">{s.label}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* AI 对话面板 */}
+      <aside
+        className="hidden w-[280px] flex-shrink-0 flex-col gap-5 overflow-y-auto border-l border-white/[0.05] p-5 xl:flex"
+        style={{ background: "rgba(10,16,30,0.4)", backdropFilter: "blur(16px)" }}
+      >
+        <Heatmap data={stats?.heatmap || {}} />
+        <div className="h-px bg-white/[0.04]" />
+        <SyncRadar data={stats?.radar || {}} />
+        <div className="h-px bg-white/[0.04]" />
+        <RecentSignals notes={stats?.recentNotes || []} />
+      </aside>
+
       <ChatPanel />
     </div>
   );

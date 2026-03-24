@@ -1,7 +1,6 @@
 // ──────────────────────────────────────────────
-//  黑海岸·守望站  —  Prisma Schema  v3 (Final)
+//  黑海岸·守望站  —  Prisma Schema v4
 //  数据库：SQLite（本地轻量索引）
-//  Phase III: Task + KnowledgeNode + Chat
 // ──────────────────────────────────────────────
 
 generator client {
@@ -12,96 +11,54 @@ datasource db {
   provider = "sqlite"
 }
 
-// 笔记索引表（物理文件存储在 /notes/*.md）
-model Note {
-  id          String   @id @default(cuid())
-  slug        String   @unique          // 文件名（不含 .md）
-  title       String
-  summary     String?                   // AI 摘要（后续阶段）
-  tags        String   @default("[]")  // JSON 数组序列化
-  domain      String?                   // 所属领域
-  filePath    String                    // 物理路径
-  wordCount   Int      @default(0)
-  readingMins Int      @default(0)
-  isMastered  Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // 关联：笔记 <-> 技能节点（多对多，Phase 2）
-  skills SkillNote[]
-}
-
-// 技能 / Roadmap 节点
-model Skill {
-  id          String      @id @default(cuid())
-  name        String      @unique
-  domain      String                     // 领域分类
-  description String?
-  level       Int         @default(0)   // 0=未开始 1=学习中 2=掌握 3=精通
-  orderIndex  Int         @default(0)
-  parentId    String?                   // 父节点（构成树形 Roadmap）
-  parent      Skill?      @relation("SkillTree", fields: [parentId], references: [id])
-  children    Skill[]     @relation("SkillTree")
-  notes       SkillNote[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-}
-
-// 笔记-技能 中间表
-model SkillNote {
-  noteId  String
-  skillId String
-  note    Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  skill   Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
-
-  @@id([noteId, skillId])
-}
-
-// 学习记录（用于统计热力图和连击天数）
-model StudyLog {
-  id        String   @id @default(cuid())
-  date      String                       // YYYY-MM-DD
-  duration  Int      @default(0)        // 分钟
-  noteId    String?
-  tags      String   @default("[]")
-  createdAt DateTime @default(now())
-
-  @@unique([date])
-}
-
-// ─── 知识星图节点 ───
+// ── 知识节点（与 initialRoadmaps.ts 对应）──
 model KnowledgeNode {
-  id             String   @id @default(cuid())
+  id             String   @id                // 与 initialRoadmaps 中的 id 对齐
   title          String
   description    String?
-  category       String            // frontend | backend | ai | gamedev | python
+  category       String                       // frontend | backend | ai | gamedev | python
   depth          Int      @default(1)
   status         String   @default("locked") // locked | available | completed
-  slug           String?  @unique
+  slug           String?
   posX           Float    @default(0)
   posY           Float    @default(0)
-  weight         Float    @default(1.0)
+  weight         Float    @default(1)
   prerequisiteId String?
-  prerequisite   KnowledgeNode?  @relation("NodeTree", fields: [prerequisiteId], references: [id])
-  dependents     KnowledgeNode[] @relation("NodeTree")
   tags           String   @default("[]")
-  tasks          Task[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
+  notes          Note[]                       // 1:N  一个节点可有多篇笔记
+  tasks          Task[]
+
   @@index([category])
   @@index([status])
-  @@index([prerequisiteId])
 }
 
-// ─── 守望清单（任务系统） ───
+// ── 笔记（多次迭代记录，关联知识节点）──
+model Note {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   @default("")          // 富文本/Markdown 内容
+  summary     String?                        // AI 摘要
+  tags        String   @default("[]")
+  nodeId      String?                        // 所属知识节点
+  node        KnowledgeNode? @relation(fields: [nodeId], references: [id])
+  wordCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([nodeId])
+}
+
+// ── 任务管理 ──
 model Task {
   id            String   @id @default(cuid())
   title         String
   description   String?
   status        String   @default("pending") // pending | active | completed | archived
-  priority      Int      @default(0)         // 0=normal 1=important 2=urgent
-  deadline      String?                      // ISO date string
+  priority      Int      @default(0)         // 0=normal 1=high 2=urgent
+  deadline      String?
   relatedNodeId String?
   relatedNode   KnowledgeNode? @relation(fields: [relatedNodeId], references: [id])
   completedAt   String?
@@ -112,3 +69,30 @@ model Task {
   @@index([relatedNodeId])
 }
 
+// ── 学习记录（热力图 + 雷达图数据源）──
+model StudyLog {
+  id        String   @id @default(cuid())
+  date      String                            // YYYY-MM-DD
+  duration  Int      @default(0)             // 分钟
+  category  String?                           // 领域分类
+  nodeId    String?                           // 关联节点
+  noteId    String?                           // 关联笔记
+  action    String   @default("note")        // note | task | study
+  createdAt DateTime @default(now())
+
+  @@index([date])
+  @@index([category])
+}
+
+// ── AI 学习总结 ──
+model LearningSummary {
+  id        String   @id @default(cuid())
+  type      String                            // weekly | monthly | domain
+  period    String                            // 如 "2025-W03" 或 "2025-01" 或 "frontend"
+  content   String   @default("")
+  source    String   @default("ai")          // ai | manual
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([type, period])
+}

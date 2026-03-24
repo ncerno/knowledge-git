@@ -1,6 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import NoteReader from "./NoteReader";
+import NoteEditorPage from "./NoteEditorPage";
+import { initialRoadmaps } from "@/lib/data/initialRoadmaps";
 
 interface NotePageProps {
   params: Promise<{ slug: string }>;
@@ -72,15 +74,19 @@ export default async function NotePage({ params }: NotePageProps) {
 
     return <NoteReader meta={meta} slug={slug} htmlContent={htmlContent} />;
   } catch {
+    const node = initialRoadmaps.find(n => n.slug === slug);
+    if (node) {
+      return <NoteEditorPage nodeId={node.id} nodeTitle={node.title} nodeCategory={node.category} />;
+    }
     return (
-      <div className="mx-auto max-w-3xl px-6 py-12">
-        <div className="glass rounded-2xl p-8">
-          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-amber-300/70">Signal Lost</p>
+      <div className="mx-auto max-w-[900px] px-6 py-12">
+        <div className="glass rounded-2xl p-8 text-center">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-amber-300/70">Signal Lost</p>
           <h1 className="mt-3 text-2xl font-bold text-white/90">未找到对应笔记</h1>
-          <p className="mt-3 text-sm leading-6 text-white/50">
-            当前星图节点已发出引导信号，但对应的 Markdown 笔记文件尚未落地。请在 <code className="rounded bg-white/10 px-1.5 py-0.5 text-cyan-300/80">notes/{slug}.md</code> 中补充内容。
+          <p className="mt-3 text-[13px] leading-6 text-white/45">
+            未找到与 <code className="rounded bg-white/[0.08] px-1.5 py-0.5 text-cyan-300/80">{slug}</code> 对应的知识节点或笔记文件。
           </p>
-          <a href="/" className="mt-6 inline-block rounded-lg bg-cyan-400/15 px-4 py-2 text-xs font-medium text-cyan-300 transition hover:bg-cyan-400/25">
+          <a href="/" className="mt-6 inline-block rounded-xl bg-cyan-400/12 px-5 py-2.5 text-[13px] font-medium text-cyan-300 transition hover:bg-cyan-400/20">
             返回守望台
           </a>
         </div>

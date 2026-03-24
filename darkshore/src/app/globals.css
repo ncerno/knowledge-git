@@ -1,156 +1,144 @@
 @import "tailwindcss";
 
-/* ─── 守岸人主题调色板 ─── */
+/* ═══════════════════════════════════════════════
+   守岸人主题  ·  Dark Shore Design System v2
+   ═══════════════════════════════════════════════ */
 @theme inline {
-  /* 核心背景色 */
-  --color-shore-void:       #0a0f1d;
-  --color-shore-deep:       #0d1526;
-  --color-shore-surface:    #111827;
-  --color-shore-panel:      #0f1c35;
-
-  /* 青色数据流荧光 */
-  --color-cyan-glow:        #00e5ff;
-  --color-cyan-soft:        #22d3ee;
-  --color-cyan-muted:       #0891b2;
-  --color-cyan-dim:         #164e63;
-
-  /* 蓝色层次 */
-  --color-blue-bright:      #3b82f6;
-  --color-blue-mid:         #1d4ed8;
-  --color-blue-deep:        #1e3a5f;
-
-  /* 中性白/灰 */
-  --color-white-pure:       #ffffff;
-  --color-white-soft:       rgba(255,255,255,0.85);
-  --color-white-muted:      rgba(255,255,255,0.5);
-  --color-white-dim:        rgba(255,255,255,0.1);
-
-  /* 字体 */
+  --color-shore-void:    #0a0f1d;
+  --color-shore-deep:    #0d1526;
+  --color-shore-surface: #111827;
+  --color-shore-panel:   #0f1c35;
+  --color-cyan-glow:     #00e5ff;
+  --color-cyan-soft:     #22d3ee;
+  --color-cyan-muted:    #0891b2;
+  --color-cyan-dim:      #164e63;
+  --color-blue-bright:   #3b82f6;
+  --color-blue-mid:      #1d4ed8;
+  --color-blue-deep:     #1e3a5f;
+  --color-white-pure:    #ffffff;
+  --color-white-soft:    rgba(255,255,255,0.85);
+  --color-white-muted:   rgba(255,255,255,0.5);
+  --color-white-dim:     rgba(255,255,255,0.1);
   --font-display: "Inter", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
   --font-mono:    "JetBrains Mono", "Fira Code", ui-monospace, monospace;
 }
 
-/* ─── 全局重置 ─── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-:root {
-  color-scheme: dark;
-  scroll-behavior: smooth;
-}
+/* ── 全局重置 ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { color-scheme: dark; scroll-behavior: smooth; }
 
 html, body {
   height: 100%;
-  background-color: #0a0f1d;
-  color: rgba(255, 255, 255, 0.85);
+  background: #0a0f1d;
+  color: rgba(255,255,255,0.87);
   font-family: "Inter", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* ─── 磨砂玻璃工具类 ─── */
-.glass {
-  background: rgba(13, 21, 38, 0.65);
-  backdrop-filter: blur(12px) saturate(1.4);
-  -webkit-backdrop-filter: blur(12px) saturate(1.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* ── 大容器呼吸空间 ── */
+.shore-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
 }
 
+/* ── 磨砂玻璃 ── */
+.glass {
+  background: rgba(13, 21, 38, 0.55);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+}
 .glass-hover {
   transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .glass-hover:hover {
-  background: rgba(0, 229, 255, 0.06);
-  border-color: rgba(0, 229, 255, 0.25);
-  box-shadow: 0 0 24px rgba(0, 229, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+  background: rgba(0,229,255,0.05);
+  border-color: rgba(0,229,255,0.2);
+  box-shadow: 0 0 28px rgba(0,229,255,0.1), inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
-/* ─── 青色荧光文字 ─── */
+/* ── 青色荧光 ── */
 .text-glow-cyan {
   color: #00e5ff;
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.6), 0 0 30px rgba(0, 229, 255, 0.2);
+  text-shadow: 0 0 12px rgba(0,229,255,0.6), 0 0 36px rgba(0,229,255,0.2);
+}
+.glow-breathe {
+  animation: breath-pulse 3s ease-in-out infinite;
 }
 
-/* ─── 滚动条美化 ─── */
-::-webkit-scrollbar { width: 4px; height: 4px; }
+/* ── 滚动条 ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.3); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,229,255,0.6); }
+::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.25); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,229,255,0.5); }
 
-/* ─── 选中高亮 ─── */
-::selection {
-  background: rgba(0, 229, 255, 0.25);
-  color: #ffffff;
+/* ── 选中高亮 ── */
+::selection { background: rgba(0,229,255,0.22); color: #fff; }
+
+/* ── Markdown 代码块 ── */
+.code-block {
+  position: relative;
+  background: rgba(13, 21, 38, 0.85);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 1.1rem 1.3rem;
+  margin: 1.2rem 0;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(186,230,253,0.88);
+}
+.code-block::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 8px; right: 14px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(0,229,255,0.3);
+}
+.inline-code {
+  background: rgba(255,255,255,0.07);
+  border-radius: 5px;
+  padding: 2px 7px;
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  color: rgba(103,232,249,0.88);
 }
 
-/* ─── DataWave 动画关键帧 ─── */
+/* ── 动画关键帧 ── */
 @keyframes wave-bar {
   0%, 100% { transform: scaleY(0.3); opacity: 0.4; }
   50%       { transform: scaleY(1.0); opacity: 1.0; }
 }
-
 @keyframes petal-drift {
-  0%   { transform: translateY(-10px) translateX(0px) rotate(0deg);   opacity: 0; }
+  0%   { transform: translateY(-10px) translateX(0) rotate(0deg); opacity: 0; }
   10%  { opacity: 0.8; }
   90%  { opacity: 0.6; }
   100% { transform: translateY(110vh) translateX(60px) rotate(720deg); opacity: 0; }
 }
-
 @keyframes star-twinkle {
   0%, 100% { opacity: 0.2; transform: scale(1); }
   50%       { opacity: 1.0; transform: scale(1.4); }
 }
-
 @keyframes breath-pulse {
   0%, 100% { opacity: 0.6; transform: scale(1); }
   50%       { opacity: 1.0; transform: scale(1.02); }
 }
-
 @keyframes scan-line {
   0%   { transform: translateY(-100%); opacity: 0; }
   10%  { opacity: 0.4; }
   90%  { opacity: 0.4; }
   100% { transform: translateY(100vh); opacity: 0; }
 }
-
-/* ─── Markdown 代码块样式 ─── */
-.code-block {
-  position: relative;
-  background: rgba(13, 21, 38, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  margin: 1rem 0;
-  overflow-x: auto;
-  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
-  font-size: 13px;
-  line-height: 1.6;
-  color: rgba(186, 230, 253, 0.85);
-}
-.code-block::before {
-  content: attr(data-lang);
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(0, 229, 255, 0.35);
-}
-.inline-code {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
-  font-size: 0.88em;
-  color: rgba(103, 232, 249, 0.85);
-}
-
-/* ─── 节点点亮动画 ─── */
 @keyframes node-light-burst {
   0%   { transform: scale(0.3); opacity: 1; }
   50%  { transform: scale(2.5); opacity: 0.6; }
