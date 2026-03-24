@@ -116,3 +116,43 @@ html, body {
   90%  { opacity: 0.4; }
   100% { transform: translateY(100vh); opacity: 0; }
 }
+
+/* ─── Markdown 代码块样式 ─── */
+.code-block {
+  position: relative;
+  background: rgba(13, 21, 38, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(186, 230, 253, 0.85);
+}
+.code-block::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(0, 229, 255, 0.35);
+}
+.inline-code {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 0.88em;
+  color: rgba(103, 232, 249, 0.85);
+}
+
+/* ─── 节点点亮动画 ─── */
+@keyframes node-light-burst {
+  0%   { transform: scale(0.3); opacity: 1; }
+  50%  { transform: scale(2.5); opacity: 0.6; }
+  100% { transform: scale(4); opacity: 0; }
+}

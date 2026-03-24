@@ -1,7 +1,7 @@
 // ──────────────────────────────────────────────
-//  黑海岸·守望站  —  Prisma Schema  v2
+//  黑海岸·守望站  —  Prisma Schema  v3 (Final)
 //  数据库：SQLite（本地轻量索引）
-//  Phase II: KnowledgeNode 知识星图节点
+//  Phase III: Task + KnowledgeNode + Chat
 // ──────────────────────────────────────────────
 
 generator client {
@@ -12,7 +12,7 @@ datasource db {
   provider = "sqlite"
 }
 
-// ─── 笔记索引表（物理文件存储在 /notes/*.md）───
+// 笔记索引表（物理文件存储在 /notes/*.md）
 model Note {
   id          String   @id @default(cuid())
   slug        String   @unique          // 文件名（不含 .md）
@@ -27,18 +27,19 @@ model Note {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // 关联：笔记 <-> 技能节点（多对多，Phase 2）
   skills SkillNote[]
 }
 
-// ─── 技能 / Roadmap 节点（旧版，保持兼容）───
+// 技能 / Roadmap 节点
 model Skill {
   id          String      @id @default(cuid())
   name        String      @unique
-  domain      String
+  domain      String                     // 领域分类
   description String?
-  level       Int         @default(0)
+  level       Int         @default(0)   // 0=未开始 1=学习中 2=掌握 3=精通
   orderIndex  Int         @default(0)
-  parentId    String?
+  parentId    String?                   // 父节点（构成树形 Roadmap）
   parent      Skill?      @relation("SkillTree", fields: [parentId], references: [id])
   children    Skill[]     @relation("SkillTree")
   notes       SkillNote[]
@@ -46,7 +47,7 @@ model Skill {
   updatedAt   DateTime    @updatedAt
 }
 
-// ─── 笔记-技能 中间表 ───
+// 笔记-技能 中间表
 model SkillNote {
   noteId  String
   skillId String
@@ -56,11 +57,11 @@ model SkillNote {
   @@id([noteId, skillId])
 }
 
-// ─── 学习记录 ───
+// 学习记录（用于统计热力图和连击天数）
 model StudyLog {
   id        String   @id @default(cuid())
-  date      String
-  duration  Int      @default(0)
+  date      String                       // YYYY-MM-DD
+  duration  Int      @default(0)        // 分钟
   noteId    String?
   tags      String   @default("[]")
   createdAt DateTime @default(now())
@@ -68,52 +69,46 @@ model StudyLog {
   @@unique([date])
 }
 
-// ────────────────────────────────────────────────────────────
-//  KnowledgeNode — 知识星图节点（Phase II 核心模型）
-//  每个节点对应星图中的一颗「星」，形成五大星域的知识网络
-// ────────────────────────────────────────────────────────────
+// ─── 知识星图节点 ───
 model KnowledgeNode {
-  id          String   @id @default(cuid())
-
-  // 节点基本信息
-  title       String                        // 节点名称，如 "React Hooks"
-  description String?                       // 简短描述
-
-  // 五大领域分类（严格枚举值）
-  // frontend | backend | ai | gamedev | python
-  category    String
-
-  // 在该领域内的层级深度（0=根节点/领域中心，1=一级主题，2=二级子主题）
-  depth       Int      @default(1)
-
-  // 学习状态
-  // locked=未解锁（灰色微光）| available=可学习（白色亮光）| completed=已完成（青色荧光）
-  status      String   @default("locked")
-
-  // 关联 Markdown 笔记文件（slug = notes/ 下的文件名，不含 .md）
-  slug        String?  @unique
-
-  // 星图坐标权重（用于 D3 力导向图的初始布局提示）
-  // x/y 为 -1.0 ~ 1.0 的相对坐标，由前端映射到实际画布
-  posX        Float    @default(0)
-  posY        Float    @default(0)
-
-  // 节点重要性权重（影响星图中节点的视觉大小）
-  weight      Float    @default(1.0)
-
-  // 树形自关联：prerequisiteId 指向前置节点（父节点）
+  id             String   @id @default(cuid())
+  title          String
+  description    String?
+  category       String            // frontend | backend | ai | gamedev | python
+  depth          Int      @default(1)
+  status         String   @default("locked") // locked | available | completed
+  slug           String?  @unique
+  posX           Float    @default(0)
+  posY           Float    @default(0)
+  weight         Float    @default(1.0)
   prerequisiteId String?
   prerequisite   KnowledgeNode?  @relation("NodeTree", fields: [prerequisiteId], references: [id])
   dependents     KnowledgeNode[] @relation("NodeTree")
-
-  // 额外标签（JSON序列化数组）
-  tags        String   @default("[]")
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  tags           String   @default("[]")
+  tasks          Task[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([category])
   @@index([status])
   @@index([prerequisiteId])
+}
+
+// ─── 守望清单（任务系统） ───
+model Task {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  status        String   @default("pending") // pending | active | completed | archived
+  priority      Int      @default(0)         // 0=normal 1=important 2=urgent
+  deadline      String?                      // ISO date string
+  relatedNodeId String?
+  relatedNode   KnowledgeNode? @relation(fields: [relatedNodeId], references: [id])
+  completedAt   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status])
+  @@index([relatedNodeId])
 }
 
