@@ -19,6 +19,7 @@ model KnowledgeNode {
   category       String                       // frontend | backend | ai | gamedev | python
   depth          Int      @default(1)
   status         String   @default("locked") // locked | available | completed
+  isMastered     Boolean  @default(false)
   slug           String?
   posX           Float    @default(0)
   posY           Float    @default(0)
@@ -33,6 +34,7 @@ model KnowledgeNode {
 
   @@index([category])
   @@index([status])
+  @@index([isMastered])
 }
 
 // ── 笔记（多次迭代记录，关联知识节点）──
@@ -42,6 +44,7 @@ model Note {
   content     String   @default("")          // 富文本/Markdown 内容
   summary     String?                        // AI 摘要
   tags        String   @default("[]")
+  version     Int      @default(1)
   nodeId      String?                        // 所属知识节点
   node        KnowledgeNode? @relation(fields: [nodeId], references: [id])
   wordCount   Int      @default(0)
@@ -49,6 +52,7 @@ model Note {
   updatedAt   DateTime @updatedAt
 
   @@index([nodeId])
+  @@index([createdAt])
 }
 
 // ── 任务管理 ──
