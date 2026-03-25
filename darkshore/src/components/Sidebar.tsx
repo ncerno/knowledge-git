@@ -1,24 +1,29 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { Settings, Anchor, ChevronLeft, FileText, BarChart3 } from "lucide-react";
-import { useState, useEffect } from "react";
-import { domainMeta, type NodeCategory } from "@/lib/data/initialRoadmaps";
+import { motion } from "framer-motion";
+import { Settings, Anchor, ChevronLeft, FileText, BarChart3, Code2, Server, Brain, Gamepad2, Sparkles } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { domainMeta, initialRoadmaps, type NodeCategory } from "@/lib/data/initialRoadmaps";
 
 interface SidebarProps {
   activeDomain: NodeCategory;
   onSelectDomain: (d: NodeCategory) => void;
 }
 
-const DOMAINS: { key: NodeCategory; emoji: string }[] = [
-  { key: "frontend", emoji: "🌊" },
-  { key: "backend", emoji: "⚓" },
-  { key: "ai", emoji: "✨" },
-  { key: "gamedev", emoji: "🎮" },
-  { key: "python", emoji: "🐍" },
+const DOMAINS: { key: NodeCategory; icon: typeof Code2 }[] = [
+  { key: "frontend", icon: Code2 },
+  { key: "backend", icon: Server },
+  { key: "ai", icon: Brain },
+  { key: "gamedev", icon: Gamepad2 },
+  { key: "python", icon: Sparkles },
 ];
 
-interface Summary { id: string; content: string; period: string; createdAt: string }
+interface Summary {
+  id: string;
+  content: string;
+  period: string;
+  createdAt: string;
+}
 
 export default function Sidebar({ activeDomain, onSelectDomain }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
@@ -32,151 +37,148 @@ export default function Sidebar({ activeDomain, onSelectDomain }: SidebarProps) 
       .catch(() => setSummaries([]));
   }, [summaryTab]);
 
+  const totalNodes = useMemo(() => initialRoadmaps.filter((n) => n.depth > 0).length, []);
+  const activeNodes = useMemo(() => initialRoadmaps.filter((n) => n.category === activeDomain && n.depth > 0).length, [activeDomain]);
+
   return (
     <motion.aside
-      className="relative z-30 flex h-full flex-shrink-0 flex-col"
-      animate={{ width: collapsed ? 68 : 272 }}
-      transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-      style={{
-        background: "rgba(10,16,30,0.72)",
-        backdropFilter: "blur(20px) saturate(1.5)",
-        WebkitBackdropFilter: "blur(20px) saturate(1.5)",
-        borderRight: "1px solid rgba(255,255,255,0.06)",
-      }}
+      className="relative z-30 hidden h-[calc(100vh-32px)] shrink-0 flex-col overflow-hidden rounded-[22px] border border-white/[0.05] bg-[rgba(15,22,38,0.84)] backdrop-blur-2xl lg:flex"
+      animate={{ width: collapsed ? 88 : 298 }}
+      transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
-      <div className="absolute left-0 right-0 top-0 h-px" style={{ background: "linear-gradient(90deg,transparent,rgba(0,229,255,0.45),transparent)" }} />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/45 to-transparent" />
 
-      {/* Logo */}
-      <div className="mb-3 flex items-center gap-3 px-5 pt-6 pb-2">
-        <motion.div
-          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl"
-          style={{ background: "linear-gradient(135deg,rgba(0,229,255,0.2),rgba(59,130,246,0.15))", border: "1px solid rgba(0,229,255,0.3)" }}
-          animate={{ boxShadow: ["0 0 8px rgba(0,229,255,0.15)", "0 0 20px rgba(0,229,255,0.35)", "0 0 8px rgba(0,229,255,0.15)"] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Anchor size={15} className="text-cyan-400" />
-        </motion.div>
-        <AnimatePresence>
+      <div className="flex items-center justify-between px-6 pb-4 pt-6">
+        <div className="flex items-center gap-3.5">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400/18 bg-cyan-400/[0.07] shadow-[0_0_30px_rgba(34,211,238,0.08)]">
+            <Anchor size={18} className="text-cyan-300" />
+          </div>
           {!collapsed && (
-            <motion.div initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} className="overflow-hidden">
-              <p className="text-sm font-bold leading-tight tracking-wider text-white/90">黑海岸</p>
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-cyan-400/65">Dark Shore</p>
-            </motion.div>
+            <div className="pr-2">
+              <p className="text-[15px] font-semibold text-white/90">黑海岸</p>
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-cyan-300/55">Shorekeeper Console</p>
+            </div>
           )}
-        </AnimatePresence>
+        </div>
+
+        <button
+          onClick={() => setCollapsed((v) => !v)}
+          className="flex h-10 w-10 items-center justify-center rounded-[16px] border border-white/[0.08] bg-white/[0.03] text-white/42 transition hover:border-cyan-400/15 hover:bg-cyan-400/[0.05] hover:text-cyan-300"
+          aria-label="切换侧边栏"
+        >
+          <motion.div animate={{ rotate: collapsed ? 180 : 0 }} transition={{ duration: 0.25 }}>
+            <ChevronLeft size={15} />
+          </motion.div>
+        </button>
       </div>
 
-      {/* 星域导航 */}
-      <div className="px-3">
-        {!collapsed && (
-          <p className="mb-2 px-2 font-mono text-[11px] uppercase tracking-[0.22em] text-cyan-400/40 glow-breathe">
-            ✦ 星域
-          </p>
-        )}
-        <nav className="flex flex-col gap-1">
-          {DOMAINS.map(({ key, emoji }) => {
-            const active = activeDomain === key;
-            const meta = domainMeta[key];
-            return (
-              <motion.button
-                key={key}
-                onClick={() => onSelectDomain(key)}
-                className="group relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left"
-                style={{
-                  background: active ? "rgba(0,229,255,0.1)" : "rgba(0,0,0,0)",
-                  border: active ? "1px solid rgba(0,229,255,0.18)" : "1px solid rgba(0,0,0,0)",
-                }}
-                whileHover={{ background: "rgba(0,229,255,0.06)" }}
-                transition={{ duration: 0.15 }}
-              >
-                {active && (
-                  <motion.div
-                    layoutId="domain-bar"
-                    className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-full"
-                    style={{ background: "linear-gradient(to bottom,#00e5ff,#3b82f6)" }}
-                  />
-                )}
-                <span className="shrink-0 text-base">{emoji}</span>
+      {!collapsed && (
+        <div className="px-5">
+          <div className="rounded-[18px] bg-white/[0.035] px-5 py-5">
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/56">星域导航</p>
+            <p className="mt-3 text-[13px] leading-6 text-white/70">选择一片星域，聚焦当前知识群落与信号流向。</p>
+            <div className="mt-4 grid grid-cols-2 gap-2.5 text-[12px] text-white/58">
+              <div className="rounded-[16px] bg-white/[0.045] px-3.5 py-3">
+                <p className="text-white/58">总节点</p>
+                <p className="mt-1.5 text-base font-semibold text-white">{totalNodes}</p>
+              </div>
+              <div className="rounded-[16px] bg-white/[0.045] px-3.5 py-3">
+                <p className="text-white/58">当前领域</p>
+                <p className="mt-1.5 text-base font-semibold text-white">{activeNodes}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <nav className="mt-5 flex flex-col gap-2.5 px-5">
+        {DOMAINS.map(({ key, icon: Icon }) => {
+          const active = activeDomain === key;
+          return (
+            <button
+              key={key}
+              onClick={() => onSelectDomain(key)}
+              className="group relative overflow-hidden rounded-[18px] px-4 py-3.5 text-left transition duration-300"
+              style={{
+                background: active ? "rgba(56,189,248,0.12)" : "rgba(255,255,255,0.04)",
+                border: active ? "1px solid rgba(56,189,248,0.18)" : "1px solid transparent",
+              }}
+            >
+              <div className="flex items-center gap-3.5">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] bg-white/[0.06]">
+                  <Icon size={16} className={active ? "text-cyan-200" : "text-white/72"} />
+                </div>
                 {!collapsed && (
-                  <div className="min-w-0 overflow-hidden">
-                    <p className={`truncate text-[13px] font-medium ${active ? "text-white" : "text-white/55 group-hover:text-white/85"}`}>
-                      {meta.label}
-                    </p>
+                  <div className="min-w-0 pr-2">
+                    <p className={`text-[15px] font-semibold leading-5 ${active ? "text-white" : "text-white/84"}`}>{domainMeta[key].label}</p>
+                    <p className="mt-1.5 truncate text-[12px] leading-5 text-white/64">{domainMeta[key].description}</p>
                   </div>
                 )}
-              </motion.button>
-            );
-          })}
-        </nav>
-      </div>
+              </div>
+            </button>
+          );
+        })}
+      </nav>
 
-      {/* 学习总结（替代守望清单） */}
-      <AnimatePresence>
-        {!collapsed && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="mt-5 flex-1 overflow-y-auto border-t border-white/[0.05] px-4 pt-4"
-          >
-            <div className="mb-3 flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <BarChart3 size={13} className="text-cyan-400/60" />
-                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-cyan-400/40">学习总结</span>
+      {!collapsed && (
+        <div className="mt-5 flex min-h-0 flex-1 flex-col px-4 pb-4">
+          <div className="rounded-[18px] bg-white/[0.04] p-5">
+            <div className="flex items-center justify-between gap-3">
+              <div className="pr-2">
+                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/64">学习摘要</p>
+                <p className="mt-1.5 text-[13px] leading-6 text-white/72">以周、月与领域维度同步守望记录。</p>
+              </div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-white/[0.05] text-white/70">
+                <BarChart3 size={16} />
               </div>
             </div>
 
-            {/* Tab 切换 */}
-            <div className="mb-3 flex gap-1 rounded-lg bg-white/[0.03] p-0.5">
-              {([["weekly", "周报"], ["monthly", "月报"], ["domain", "领域"]] as const).map(([k, label]) => (
-                <button
-                  key={k}
-                  onClick={() => setSummaryTab(k)}
-                  className={`flex-1 rounded-md py-1.5 text-[11px] font-medium transition ${summaryTab === k ? "bg-cyan-400/15 text-cyan-300" : "text-white/35 hover:text-white/55"}`}
-                >
-                  {label}
-                </button>
-              ))}
+            <div className="mt-4 inline-flex rounded-[16px] bg-white/[0.05] p-1">
+              {[
+                { key: "weekly", label: "周" },
+                { key: "monthly", label: "月" },
+                { key: "domain", label: "域" },
+              ].map((tab) => {
+                const active = summaryTab === tab.key;
+                return (
+                  <button
+                    key={tab.key}
+                    onClick={() => setSummaryTab(tab.key as typeof summaryTab)}
+                    className={`rounded-[12px] px-3.5 py-2 text-[12px] font-medium transition ${active ? "bg-cyan-400/[0.14] text-cyan-100" : "text-white/62 hover:text-white/88"}`}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
             </div>
 
-            {/* 总结内容 */}
-            <div className="space-y-2">
+            <div className="mt-4 space-y-3">
               {summaries.length === 0 ? (
-                <div className="rounded-xl bg-white/[0.02] px-3 py-4 text-center">
-                  <FileText size={20} className="mx-auto mb-2 text-white/15" />
-                  <p className="text-[11px] text-white/30">暂无{summaryTab === "weekly" ? "周" : summaryTab === "monthly" ? "月" : "领域"}报</p>
-                  <p className="mt-1 text-[10px] text-white/20">AI 将自动生成学习总结</p>
+                <div className="rounded-[16px] bg-white/[0.045] px-4 py-5 text-center">
+                  <FileText size={16} className="mx-auto text-white/35" />
+                  <p className="mt-2 text-[12px] text-white/60">暂无同步摘要</p>
                 </div>
               ) : (
-                summaries.slice(0, 3).map((s) => (
-                  <div key={s.id} className="rounded-xl border border-white/[0.05] bg-white/[0.02] p-3">
-                    <p className="mb-1 font-mono text-[10px] text-cyan-400/50">{s.period}</p>
-                    <p className="line-clamp-3 text-[12px] leading-5 text-white/55">{s.content}</p>
+                summaries.slice(0, 2).map((summary) => (
+                  <div key={summary.id} className="rounded-[16px] bg-white/[0.05] px-4 py-4">
+                    <p className="line-clamp-3 text-[13px] leading-6 text-white/80">{summary.content}</p>
+                    <div className="mt-3 flex items-center justify-between text-[11px] text-white/56">
+                      <span>{summary.period}</span>
+                      <span>{new Date(summary.createdAt).toLocaleDateString("zh-CN")}</span>
+                    </div>
                   </div>
                 ))
               )}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
 
-      {/* 底部 */}
-      <div className="mt-auto flex flex-col gap-1 border-t border-white/[0.05] px-3 pb-4 pt-3">
-        <motion.button
-          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-white/35 hover:text-white/65"
-          whileHover={{ background: "rgba(255,255,255,0.03)" }}
-        >
+      <div className="mt-auto border-t border-white/[0.05] px-4 py-4">
+        <button className="flex w-full items-center gap-3 rounded-[16px] bg-white/[0.045] px-4 py-3 text-left text-white/72 transition hover:bg-cyan-400/[0.08] hover:text-white">
           <Settings size={15} />
-          {!collapsed && <span className="text-[13px]">系统设置</span>}
-        </motion.button>
-        <motion.button
-          onClick={() => setCollapsed(!collapsed)}
-          className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-white/25 hover:text-cyan-400/60"
-          whileHover={{ background: "rgba(0,229,255,0.03)" }}
-        >
-          <motion.div animate={{ rotate: collapsed ? 180 : 0 }} transition={{ duration: 0.3 }}>
-            <ChevronLeft size={14} />
-          </motion.div>
-          {!collapsed && <span className="font-mono text-[10px] tracking-wider text-white/20">COLLAPSE</span>}
-        </motion.button>
+          {!collapsed && <span className="text-sm font-medium">系统设置</span>}
+        </button>
       </div>
     </motion.aside>
   );

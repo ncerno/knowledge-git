@@ -1,13 +1,21 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { JetBrains_Mono, Nunito } from "next/font/google";
 import "./globals.css";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import PetalCanvas from "@/components/PetalCanvas";
 
-const inter = Inter({
+const nunito = Nunito({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-sans-rounded",
   display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono-ui",
+  display: "swap",
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -22,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className={inter.variable}>
-      <body className="antialiased overflow-hidden h-screen">
+    <html lang="zh-CN" className={`${nunito.variable} ${jetbrainsMono.variable}`}>
+      <body className="min-h-screen antialiased">
         <StarfieldBackground />
         <PetalCanvas />
         <div
@@ -33,7 +41,7 @@ export default function RootLayout({
               "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,229,255,0.015) 2px, rgba(0,229,255,0.015) 4px)",
           }}
         />
-        <main className="relative z-20 h-screen overflow-y-auto overflow-x-hidden">
+        <main className="relative z-20 min-h-screen overflow-x-hidden">
           {children}
         </main>
       </body>

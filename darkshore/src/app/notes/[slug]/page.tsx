@@ -1,5 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import Link from "next/link";
+import { Compass, ArrowLeft } from "lucide-react";
 import NoteReader from "./NoteReader";
 import NoteEditorPage from "./NoteEditorPage";
 import { initialRoadmaps } from "@/lib/data/initialRoadmaps";
@@ -9,7 +11,6 @@ interface NotePageProps {
 }
 
 function parseFrontmatter(markdown: string) {
-  // 移除 BOM 字符
   const cleaned = markdown.replace(/^\uFEFF/, "");
   if (!cleaned.startsWith("---")) {
     return { meta: {} as Record<string, string>, content: markdown };
@@ -74,21 +75,24 @@ export default async function NotePage({ params }: NotePageProps) {
 
     return <NoteReader meta={meta} slug={slug} htmlContent={htmlContent} />;
   } catch {
-    const node = initialRoadmaps.find(n => n.slug === slug);
+    const node = initialRoadmaps.find((n) => n.slug === slug);
     if (node) {
       return <NoteEditorPage nodeId={node.id} nodeTitle={node.title} nodeCategory={node.category} />;
     }
     return (
-      <div className="mx-auto max-w-[900px] px-6 py-12">
-        <div className="glass rounded-2xl p-8 text-center">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-amber-300/70">Signal Lost</p>
-          <h1 className="mt-3 text-2xl font-bold text-white/90">未找到对应笔记</h1>
-          <p className="mt-3 text-[13px] leading-6 text-white/45">
-            未找到与 <code className="rounded bg-white/[0.08] px-1.5 py-0.5 text-cyan-300/80">{slug}</code> 对应的知识节点或笔记文件。
+      <div className="shore-shell">
+        <div className="mx-auto max-w-3xl shore-panel p-8 text-center sm:p-10">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-300/18 bg-amber-300/[0.06]">
+            <Compass size={20} className="text-amber-200/78" />
+          </div>
+          <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.28em] text-amber-300/70">Signal Lost</p>
+          <h1 className="mt-3 text-2xl font-semibold text-white/92 sm:text-3xl">未找到对应笔记</h1>
+          <p className="mx-auto mt-3 max-w-xl text-[14px] leading-7 text-white/46">
+            未找到与 <code className="rounded-lg bg-white/[0.08] px-2 py-1 text-cyan-300/80">{slug}</code> 对应的知识节点或笔记文件，请返回守望台重新选择航线。
           </p>
-          <a href="/" className="mt-6 inline-block rounded-xl bg-cyan-400/12 px-5 py-2.5 text-[13px] font-medium text-cyan-300 transition hover:bg-cyan-400/20">
-            返回守望台
-          </a>
+          <Link href="/" className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-cyan-400/16 bg-cyan-400/[0.08] px-5 py-2.5 text-[13px] font-medium text-cyan-200 transition hover:bg-cyan-400/[0.12]">
+            <ArrowLeft size={14} /> 返回守望台
+          </Link>
         </div>
       </div>
     );

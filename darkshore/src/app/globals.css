@@ -19,8 +19,9 @@
   --color-white-soft:    rgba(255,255,255,0.85);
   --color-white-muted:   rgba(255,255,255,0.5);
   --color-white-dim:     rgba(255,255,255,0.1);
-  --font-display: "Inter", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  --font-display: var(--font-sans-rounded), "Noto Sans SC", "PingFang SC", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-sans-rounded), "Noto Sans SC", "PingFang SC", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-ui), "Fira Code", ui-monospace, monospace;
 }
 
 /* ── 全局重置 ── */
@@ -29,9 +30,9 @@
 
 html, body {
   height: 100%;
-  background: #0a0f1d;
-  color: rgba(255,255,255,0.87);
-  font-family: "Inter", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  background: #101827;
+  color: rgba(255,255,255,0.92);
+  font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.65;
   letter-spacing: 0.01em;
@@ -40,11 +41,25 @@ html, body {
   overflow-x: hidden;
 }
 
+body {
+  background-image:
+    radial-gradient(circle at 20% 18%, rgba(34,211,238,0.11), transparent 26%),
+    radial-gradient(circle at 82% 16%, rgba(59,130,246,0.08), transparent 22%),
+    linear-gradient(180deg, rgba(255,255,255,0.03), transparent 34%);
+}
+
 /* ── 大容器呼吸空间 ── */
 .shore-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 clamp(1rem, 3vw, 2.5rem);
+}
+
+.shore-shell {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(1rem, 2vw, 1.5rem);
 }
 
 /* ── 磨砂玻璃 ── */
@@ -63,6 +78,57 @@ html, body {
   border-color: rgba(0,229,255,0.2);
   box-shadow: 0 0 28px rgba(0,229,255,0.1), inset 0 1px 0 rgba(255,255,255,0.06);
 }
+
+/* ── 面板语义层 ── */
+.shore-panel {
+  background: rgba(15, 22, 38, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  backdrop-filter: blur(20px) saturate(1.12);
+  -webkit-backdrop-filter: blur(20px) saturate(1.12);
+  border-radius: 22px;
+}
+
+.shore-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 18px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.shore-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(255,255,255,0.09);
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  padding: 0.55rem 0.95rem;
+}
+
+@media (max-width: 1279px) {
+  .shore-container {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .shore-shell {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  html, body {
+    font-size: 14px;
+  }
+
+  .shore-container,
+  .shore-shell {
+    padding: 0 0.875rem;
+  }
+}
+
 
 /* ── 青色荧光 ── */
 .text-glow-cyan {
