@@ -1,7 +1,7 @@
-// ──────────────────────────────────────────────
-//  黑海岸·守望站  —  Prisma Schema v4
-//  数据库：SQLite（本地轻量索引）
-// ──────────────────────────────────────────────
+// --------------------------------------------------
+//  Darkshore - Prisma Schema
+//  SQLite - url configured in prisma.config.ts
+// --------------------------------------------------
 
 generator client {
   provider = "prisma-client-js"
@@ -11,14 +11,13 @@ datasource db {
   provider = "sqlite"
 }
 
-// ── 知识节点（与 initialRoadmaps.ts 对应）──
 model KnowledgeNode {
-  id             String   @id                // 与 initialRoadmaps 中的 id 对齐
+  id             String   @id
   title          String
   description    String?
-  category       String                       // frontend | backend | ai | gamedev | python
+  category       String
   depth          Int      @default(1)
-  status         String   @default("locked") // locked | available | completed
+  status         String   @default("locked")
   isMastered     Boolean  @default(false)
   slug           String?
   posX           Float    @default(0)
@@ -28,88 +27,78 @@ model KnowledgeNode {
   tags           String   @default("[]")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-
-  notes          Note[]                       // 1:N  一个节点可有多篇笔记
+  notes          Note[]
   tasks          Task[]
-
   @@index([category])
   @@index([status])
   @@index([isMastered])
 }
 
-// ── 笔记（多次迭代记录，关联知识节点）──
 model Note {
   id          String   @id @default(cuid())
   title       String
-  content     String   @default("")          // 富文本/Markdown 内容
-  summary     String?                        // AI 摘要
+  content     String   @default("")
+  summary     String?
   tags        String   @default("[]")
   version     Int      @default(1)
-  nodeId      String?                        // 所属知识节点
+  nodeId      String?
   node        KnowledgeNode? @relation(fields: [nodeId], references: [id])
   wordCount   Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
   @@index([nodeId])
   @@index([createdAt])
 }
 
-// ── 任务管理 ──
 model Task {
   id            String   @id @default(cuid())
   title         String
   description   String?
-  status        String   @default("pending") // pending | active | completed | archived
-  priority      Int      @default(0)         // 0=normal 1=high 2=urgent
+  status        String   @default("pending")
+  priority      Int      @default(0)
   deadline      String?
   relatedNodeId String?
   relatedNode   KnowledgeNode? @relation(fields: [relatedNodeId], references: [id])
   completedAt   String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-
   @@index([status])
   @@index([relatedNodeId])
 }
 
-// ── 学习记录（热力图 + 雷达图数据源）──
 model StudyLog {
   id        String   @id @default(cuid())
-  date      String                            // YYYY-MM-DD
-  duration  Int      @default(0)             // 分钟
-  category  String?                           // 领域分类
-  nodeId    String?                           // 关联节点
-  noteId    String?                           // 关联笔记
-  action    String   @default("note")        // note | task | study | chat | summary
-  source    String   @default("manual")      // manual | ai | import
-  inputType String?                           // note | task | chat | summary | review
-  periodKey String?                           // week/month/domain 聚合键
-  metadata  String   @default("{}")          // 额外上下文 JSON
+  date      String
+  duration  Int      @default(0)
+  category  String?
+  nodeId    String?
+  noteId    String?
+  action    String   @default("note")
+  source    String   @default("manual")
+  inputType String?
+  periodKey String?
+  metadata  String   @default("{}")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   @@index([date])
   @@index([category])
   @@index([action])
   @@index([nodeId])
 }
 
-// ── AI 学习总结 ──
 model LearningSummary {
   id          String   @id @default(cuid())
-  type        String                            // weekly | monthly | domain
-  period      String                            // 如 "2025-W03" 或 "2025-01" 或 "frontend"
+  type        String
+  period      String
   title       String   @default("")
   category    String?
   content     String   @default("")
   contentHtml String   @default("")
   excerpt     String   @default("")
-  source      String   @default("ai")          // ai | manual | amethyst
-  status      String   @default("published")   // draft | published | archived
+  source      String   @default("ai")
+  status      String   @default("published")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
   @@unique([type, period])
   @@index([type, createdAt])
   @@index([category])

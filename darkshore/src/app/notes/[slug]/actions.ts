@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
+import { initialRoadmaps } from "@/lib/data/initialRoadmaps";
 
 type SaveNoteInput = {
   id?: string;
@@ -23,6 +24,34 @@ function extractSummary(content: string) {
   return plain.slice(0, 140) || "这片星域尚未被观测，期待你的第一次共鸣...";
 }
 
+async function ensureKnowledgeNode(nodeId: string) {
+  const existing = await prisma.knowledgeNode.findUnique({ where: { id: nodeId } });
+  if (existing) return existing;
+
+  const roadmapNode = initialRoadmaps.find((item) => item.id === nodeId);
+  if (!roadmapNode) {
+    throw new Error(`未找到对应知识节点: ${nodeId}`);
+  }
+
+  return prisma.knowledgeNode.create({
+    data: {
+      id: roadmapNode.id,
+      title: roadmapNode.title,
+      description: roadmapNode.description || null,
+      category: roadmapNode.category,
+      depth: roadmapNode.depth,
+      status: roadmapNode.status,
+      isMastered: false,
+      slug: roadmapNode.slug || null,
+      posX: roadmapNode.posX,
+      posY: roadmapNode.posY,
+      weight: roadmapNode.weight,
+      prerequisiteId: roadmapNode.prerequisiteId || null,
+      tags: JSON.stringify(roadmapNode.tags || []),
+    },
+  });
+}
+
 export async function saveNoteDraft(input: SaveNoteInput) {
   const title = input.title.trim() || "未命名观测记录";
   const content = input.content.trim();
@@ -33,6 +62,8 @@ export async function saveNoteDraft(input: SaveNoteInput) {
   if (!input.nodeId) {
     throw new Error("缺少 nodeId");
   }
+
+  await ensureKnowledgeNode(input.nodeId);
 
   const existingCount = await prisma.note.count({ where: { nodeId: input.nodeId } });
 

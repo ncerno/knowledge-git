@@ -17,8 +17,8 @@ interface StatsData {
   heatmap: Record<string, number>;
   radar: Record<string, number>;
   recentNotes: { id: string; title: string; createdAt: string; wordCount: number; node?: { id: string; title: string; category: string } | null }[];
-  litNodes: string[];
-  totalNotes: number;
+  litNodes?: string[];
+  totalNotes?: number;
 }
 
 const KPI_META = [
@@ -39,7 +39,7 @@ export default function HomePage() {
 
   const nodeStats = useMemo(() => {
     const total = initialRoadmaps.filter((n) => n.depth > 0).length;
-    const notedCount = stats?.litNodes.length || 0;
+    const notedCount = stats?.litNodes?.length || 0;
     const totalNotes = stats?.totalNotes || 0;
     return { total, notedCount, totalNotes };
   }, [stats]);
