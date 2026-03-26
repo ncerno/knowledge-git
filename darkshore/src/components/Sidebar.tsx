@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Settings, Anchor, ChevronLeft, FileText, BarChart3, Code2, Server, Brain, Gamepad2, Sparkles } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import { domainMeta, initialRoadmaps, type NodeCategory } from "@/lib/data/initialRoadmaps";
+import { renderSummaryMarkdown } from "@/lib/summaryMarkdown";
 
 interface SidebarProps {
   activeDomain: NodeCategory;
@@ -20,9 +21,14 @@ const DOMAINS: { key: NodeCategory; icon: typeof Code2 }[] = [
 
 interface Summary {
   id: string;
+  title?: string;
   content: string;
+  contentHtml?: string;
+  excerpt?: string;
   period: string;
   createdAt: string;
+  updatedAt?: string;
+  category?: string | null;
 }
 
 export default function Sidebar({ activeDomain, onSelectDomain }: SidebarProps) {
@@ -31,11 +37,12 @@ export default function Sidebar({ activeDomain, onSelectDomain }: SidebarProps) 
   const [summaries, setSummaries] = useState<Summary[]>([]);
 
   useEffect(() => {
-    fetch(`/api/internal/sync-summary?type=${summaryTab}`)
+    const query = summaryTab === "domain" ? `?type=domain&category=${activeDomain}` : `?type=${summaryTab}`;
+    fetch(`/api/internal/sync-summary${query}`)
       .then((r) => r.json())
       .then((d) => setSummaries(d.summaries || []))
       .catch(() => setSummaries([]));
-  }, [summaryTab]);
+  }, [summaryTab, activeDomain]);
 
   const totalNodes = useMemo(() => initialRoadmaps.filter((n) => n.depth > 0).length, []);
   const activeNodes = useMemo(() => initialRoadmaps.filter((n) => n.category === activeDomain && n.depth > 0).length, [activeDomain]);
@@ -125,8 +132,8 @@ export default function Sidebar({ activeDomain, onSelectDomain }: SidebarProps) 
           <div className="rounded-[18px] bg-white/[0.04] p-5">
             <div className="flex items-center justify-between gap-3">
               <div className="pr-2">
-                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/64">学习摘要</p>
-                <p className="mt-1.5 text-[13px] leading-6 text-white/72">以周、月与领域维度同步守望记录。</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/64">学习总结看板</p>
+                <p className="mt-1.5 text-[13px] leading-6 text-white/72">爱弥斯生成的周报、月报与领域总结会在这里实时浮现。</p>
               </div>
               <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-white/[0.05] text-white/70">
                 <BarChart3 size={16} />
@@ -135,9 +142,9 @@ export default function Sidebar({ activeDomain, onSelectDomain }: SidebarProps) 
 
             <div className="mt-4 inline-flex rounded-[16px] bg-white/[0.05] p-1">
               {[
-                { key: "weekly", label: "周" },
-                { key: "monthly", label: "月" },
-                { key: "domain", label: "域" },
+                { key: "weekly", label: "周报" },
+                { key: "monthly", label: "月报" },
+                { key: "domain", label: "领域" },
               ].map((tab) => {
                 const active = summaryTab === tab.key;
                 return (
@@ -152,21 +159,29 @@ export default function Sidebar({ activeDomain, onSelectDomain }: SidebarProps) 
               })}
             </div>
 
-            <div className="mt-4 space-y-3">
+            <div className="mt-4 space-y-3 overflow-y-auto pr-1">
               {summaries.length === 0 ? (
                 <div className="rounded-[16px] bg-white/[0.045] px-4 py-5 text-center">
                   <FileText size={16} className="mx-auto text-white/35" />
                   <p className="mt-2 text-[12px] text-white/60">暂无同步摘要</p>
                 </div>
               ) : (
-                summaries.slice(0, 2).map((summary) => (
-                  <div key={summary.id} className="rounded-[16px] bg-white/[0.05] px-4 py-4">
-                    <p className="line-clamp-3 text-[13px] leading-6 text-white/80">{summary.content}</p>
-                    <div className="mt-3 flex items-center justify-between text-[11px] text-white/56">
-                      <span>{summary.period}</span>
-                      <span>{new Date(summary.createdAt).toLocaleDateString("zh-CN")}</span>
+                summaries.slice(0, 3).map((summary) => (
+                  <article key={summary.id} className="rounded-[16px] bg-white/[0.05] px-4 py-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 pr-2">
+                        <p className="text-[14px] font-semibold leading-6 text-white">{summary.title || summary.period}</p>
+                        <p className="text-[11px] text-cyan-200/80">{summaryTab === "domain" ? domainMeta[activeDomain].label : summary.period}</p>
+                      </div>
+                      <span className="shrink-0 rounded-full bg-white/[0.07] px-2.5 py-1 text-[10px] text-white/70">
+                        {new Date(summary.updatedAt || summary.createdAt).toLocaleDateString("zh-CN")}
+                      </span>
                     </div>
-                  </div>
+                    <div
+                      className="summary-prose mt-3 text-[12px] leading-6 text-white/82"
+                      dangerouslySetInnerHTML={{ __html: summary.contentHtml || renderSummaryMarkdown(summary.content) }}
+                    />
+                  </article>
                 ))
               )}
             </div>

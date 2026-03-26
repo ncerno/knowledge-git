@@ -148,6 +148,22 @@ body {
 /* ── 选中高亮 ── */
 ::selection { background: rgba(0,229,255,0.22); color: #fff; }
 
+/* ── 学习总结看板 Markdown 排版 ── */
+.summary-prose h1 { font-size: 1.1rem; font-weight: 700; color: rgba(255,255,255,0.94); margin: 0.6rem 0 0.3rem; line-height: 1.4; }
+.summary-prose h2 { font-size: 0.95rem; font-weight: 700; color: rgba(255,255,255,0.90); margin: 0.5rem 0 0.25rem; line-height: 1.4; }
+.summary-prose h3 { font-size: 0.85rem; font-weight: 600; color: rgba(186,230,253,0.88); margin: 0.4rem 0 0.2rem; line-height: 1.4; }
+.summary-prose p { margin: 0.3rem 0; color: rgba(255,255,255,0.78); }
+.summary-prose strong { color: rgba(255,255,255,0.96); font-weight: 600; }
+.summary-prose em { color: rgba(186,230,253,0.82); font-style: italic; }
+.summary-prose code { background: rgba(255,255,255,0.08); border-radius: 4px; padding: 1px 5px; font-family: var(--font-mono); font-size: 0.88em; color: rgba(103,232,249,0.88); }
+.summary-prose ul, .summary-prose ol { margin: 0.3rem 0 0.3rem 1.1rem; padding: 0; }
+.summary-prose li { margin: 0.15rem 0; color: rgba(255,255,255,0.78); }
+.summary-prose ul li { list-style-type: disc; }
+.summary-prose ol li { list-style-type: decimal; }
+.summary-prose blockquote { border-left: 2px solid rgba(34,211,238,0.45); margin: 0.4rem 0; padding: 0.3rem 0.7rem; color: rgba(255,255,255,0.68); background: rgba(34,211,238,0.04); border-radius: 0 8px 8px 0; }
+.summary-prose a { color: rgba(125,211,252,0.92); text-decoration: underline; text-underline-offset: 2px; }
+.summary-prose a:hover { color: rgba(186,230,253,1); }
+
 /* ── Markdown 代码块 ── */
 .code-block {
   position: relative;

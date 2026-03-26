@@ -81,22 +81,36 @@ model StudyLog {
   category  String?                           // 领域分类
   nodeId    String?                           // 关联节点
   noteId    String?                           // 关联笔记
-  action    String   @default("note")        // note | task | study
+  action    String   @default("note")        // note | task | study | chat | summary
+  source    String   @default("manual")      // manual | ai | import
+  inputType String?                           // note | task | chat | summary | review
+  periodKey String?                           // week/month/domain 聚合键
+  metadata  String   @default("{}")          // 额外上下文 JSON
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([date])
   @@index([category])
+  @@index([action])
+  @@index([nodeId])
 }
 
 // ── AI 学习总结 ──
 model LearningSummary {
-  id        String   @id @default(cuid())
-  type      String                            // weekly | monthly | domain
-  period    String                            // 如 "2025-W03" 或 "2025-01" 或 "frontend"
-  content   String   @default("")
-  source    String   @default("ai")          // ai | manual
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  type        String                            // weekly | monthly | domain
+  period      String                            // 如 "2025-W03" 或 "2025-01" 或 "frontend"
+  title       String   @default("")
+  category    String?
+  content     String   @default("")
+  contentHtml String   @default("")
+  excerpt     String   @default("")
+  source      String   @default("ai")          // ai | manual | amethyst
+  status      String   @default("published")   // draft | published | archived
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@unique([type, period])
+  @@index([type, createdAt])
+  @@index([category])
 }
