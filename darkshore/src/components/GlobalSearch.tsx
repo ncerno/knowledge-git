@@ -77,11 +77,11 @@ export default function GlobalSearch({ onNavigateNode }: GlobalSearchProps) {
     <>
       <button
         onClick={handleOpen}
-        className="flex min-h-11 items-center gap-2.5 rounded-[16px] bg-[rgba(255,255,255,0.06)] px-4 py-2.5 text-[13px] text-white/82 backdrop-blur-md transition duration-200 hover:bg-white/[0.09] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/25"
+        className="flex min-h-11 items-center gap-2.5 rounded-[8px] bg-[rgba(255,255,255,0.06)] px-4 py-2.5 text-[13px] text-white/82 backdrop-blur-md transition duration-200 hover:bg-white/[0.09] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/25"
       >
         <Search size={14} className="text-cyan-200/90" />
-        <span className="hidden pr-1 sm:inline">搜索星图、节点与航线</span>
-        <kbd className="ml-1 hidden rounded-[10px] bg-white/[0.07] px-2.5 py-1.5 font-mono text-[10px] text-white/72 sm:inline">
+        <span className="hidden pr-1 sm:inline">搜索节点</span>
+        <kbd className="ml-1 hidden rounded-[4px] bg-white/[0.07] px-2 py-1 font-mono text-[10px] text-white/65 sm:inline">
           ⌘K
         </kbd>
       </button>
@@ -97,7 +97,7 @@ export default function GlobalSearch({ onNavigateNode }: GlobalSearchProps) {
             <div className="absolute inset-0 bg-[rgba(4,8,16,0.78)] backdrop-blur-md" onClick={handleClose} />
 
             <motion.div
-              className="relative z-10 w-full max-w-[860px] overflow-hidden rounded-[22px] bg-[rgba(15,22,38,0.96)] shadow-[0_24px_120px_rgba(0,0,0,0.42)] backdrop-blur-2xl"
+              className="relative z-10 w-full max-w-[860px] overflow-hidden rounded-[14px] bg-[rgba(15,22,38,0.96)] shadow-[0_24px_120px_rgba(0,0,0,0.42)] backdrop-blur-2xl"
               initial={{ scale: 0.96, y: -18 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.96, y: -18 }}
@@ -105,14 +105,14 @@ export default function GlobalSearch({ onNavigateNode }: GlobalSearchProps) {
               <div className="border-b border-white/[0.08] px-5 py-5 sm:px-6">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <div className="pr-2">
-                    <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-200/70">Darkshore Search</p>
-                    <p className="mt-1.5 text-[14px] leading-6 text-white/72">在五大星域中检索节点、主题与笔记入口</p>
+                    <p className="text-[13px] font-medium text-white/80">知识搜索</p>
+                    <p className="mt-0.5 font-mono text-[10px] tracking-[0.08em] text-white/35">Darkshore Search</p>
                   </div>
-                  <button onClick={handleClose} className="rounded-[14px] bg-white/[0.06] p-2.5 text-white/68 transition hover:bg-white/[0.1] hover:text-white">
+                  <button onClick={handleClose} className="rounded-[8px] bg-white/[0.06] p-2 text-white/60 transition hover:bg-white/[0.1] hover:text-white">
                     <X size={16} />
                   </button>
                 </div>
-                <div className="flex items-center gap-3 rounded-[16px] bg-white/[0.06] px-4 py-3.5 transition focus-within:bg-white/[0.09]">
+                <div className="flex items-center gap-3 rounded-[8px] bg-white/[0.05] px-4 py-3 transition focus-within:bg-white/[0.08]">
                   <Sparkles size={16} className="text-cyan-200/90" />
                   <input
                     ref={inputRef}
@@ -126,8 +126,8 @@ export default function GlobalSearch({ onNavigateNode }: GlobalSearchProps) {
 
               <div className="max-h-[60vh] overflow-y-auto p-4 sm:p-5">
                 {query.trim() && results.length === 0 && (
-                  <div className="rounded-[16px] bg-white/[0.05] px-4 py-10 text-center">
-                    <p className="text-[14px] text-white/68">未探测到匹配信号，试试更短的关键词或领域名。</p>
+                  <div className="rounded-[8px] bg-white/[0.04] px-4 py-10 text-center">
+                    <p className="text-[14px] text-white/60">未找到匹配结果，试试更短的关键词。</p>
                   </div>
                 )}
 
@@ -135,9 +135,9 @@ export default function GlobalSearch({ onNavigateNode }: GlobalSearchProps) {
                   <button
                     key={item.id}
                     onClick={() => handleSelect(item)}
-                    className="group flex w-full items-start gap-3 rounded-[16px] px-4 py-3.5 text-left transition duration-200 hover:bg-white/[0.06]"
+                    className="group flex w-full items-start gap-3 rounded-[8px] px-3.5 py-3 text-left transition duration-200 hover:bg-white/[0.05]"
                   >
-                    <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] bg-white/[0.06]">
+                    <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-[6px] bg-white/[0.05]">
                       <MapPin size={14} className={statusColor[item.status]?.split(" ")[0]} />
                     </div>
                     <div className="min-w-0 flex-1">
@@ -153,16 +153,16 @@ export default function GlobalSearch({ onNavigateNode }: GlobalSearchProps) {
 
                 {!query.trim() && (
                   <div className="space-y-4">
-                    <div className="rounded-[18px] bg-white/[0.045] p-4">
-                      <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-white/64">
-                        <FileText size={12} /> 快捷航路
+                    <div className="rounded-[10px] bg-white/[0.04] p-4">
+                      <p className="flex items-center gap-2 text-[12px] font-medium text-white/60">
+                        <FileText size={12} /> 快捷入口
                       </p>
                       <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
                         {QUICK_DOMAINS.map((cat) => (
                           <button
                             key={cat}
                             onClick={() => setQuery(domainMeta[cat].label)}
-                            className="rounded-[16px] bg-white/[0.055] px-3.5 py-3.5 text-left transition duration-200 hover:bg-white/[0.08]"
+                            className="rounded-[8px] bg-white/[0.04] px-3.5 py-3 text-left transition duration-200 hover:bg-white/[0.07]"
                           >
                             <p className="text-[13px] font-semibold text-white/88">{domainMeta[cat].label}</p>
                             <p className="mt-1 text-[12px] leading-5 text-white/66">{domainMeta[cat].description}</p>
@@ -170,7 +170,7 @@ export default function GlobalSearch({ onNavigateNode }: GlobalSearchProps) {
                         ))}
                       </div>
                     </div>
-                    <p className="px-1 text-[12px] text-white/60">提示：按 <span className="rounded bg-white/[0.08] px-1.5 py-0.5 font-mono text-white/78">Esc</span> 可快速关闭。</p>
+                    <p className="px-1 text-[12px] text-white/50">提示：按 <span className="rounded bg-white/[0.08] px-1.5 py-0.5 font-mono text-white/70">Esc</span> 可快速关闭。</p>
                   </div>
                 )}
               </div>

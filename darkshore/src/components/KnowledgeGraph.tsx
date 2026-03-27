@@ -156,14 +156,14 @@ export default function KnowledgeGraph({ activeDomain, highlightNodeId, litNodeI
   return (
     <div
       ref={boxRef}
-      className="relative h-full w-full cursor-grab overflow-hidden rounded-[20px] bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.018))] active:cursor-grabbing"
+      className="relative h-full w-full cursor-grab overflow-hidden rounded-[14px] bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.018))] active:cursor-grabbing"
       onPointerDown={onPD}
       onPointerMove={onPM}
       onPointerUp={onPU}
       onWheel={onWh}
       style={{ touchAction: "none" }}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(103,232,249,0.12),transparent_26%),radial-gradient(circle_at_78%_28%,rgba(56,189,248,0.08),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_55%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(103,232,249,0.08),transparent_26%),radial-gradient(circle_at_78%_28%,rgba(56,189,248,0.05),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.015),transparent_55%)]" />
       <svg className="absolute inset-0 h-full w-full" viewBox={`0 0 ${dims.w} ${dims.h}`}>
 
         <defs>
@@ -247,9 +247,9 @@ export default function KnowledgeGraph({ activeDomain, highlightNodeId, litNodeI
               </text>
               {isHover && n.description && (
                 <foreignObject x={n.sx + n.r + 8} y={n.sy + 12} width={220} height={82}>
-                  <div className="rounded-2xl border border-white/10 bg-[rgba(7,12,24,0.9)] px-3 py-2.5 shadow-[0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-md">
-                    <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-cyan-300/56">节点注记</p>
-                    <p className="mt-1.5 text-[11px] leading-5 text-white/58">{n.description}</p>
+                  <div className="rounded-[8px] border border-white/10 bg-[rgba(7,12,24,0.92)] px-3 py-2.5 shadow-[0_12px_32px_rgba(0,0,0,0.3)] backdrop-blur-md">
+                    <p className="text-[10px] font-medium text-white/55">节点描述</p>
+                    <p className="mt-1 text-[11px] leading-5 text-white/65">{n.description}</p>
                   </div>
                 </foreignObject>
               )}
@@ -260,27 +260,28 @@ export default function KnowledgeGraph({ activeDomain, highlightNodeId, litNodeI
       <canvas ref={canRef} className="pointer-events-none absolute inset-0 h-full w-full" width={dims.w} height={dims.h} />
 
       <motion.div
-        className="absolute left-5 right-5 top-5 rounded-[20px] bg-[rgba(15,22,38,0.82)] px-5 py-5 backdrop-blur-xl sm:right-auto sm:max-w-[430px] sm:px-6 sm:py-6"
+        className="absolute left-5 right-5 top-5 rounded-[10px] bg-[rgba(15,22,38,0.85)] px-5 py-4 backdrop-blur-xl sm:right-auto sm:max-w-[430px] sm:px-5 sm:py-4"
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 pr-2">
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-200/70">Knowledge Constellation</p>
-            <h3 className="mt-3 text-[1.2rem] font-semibold leading-7 text-white">
+            <p className="text-[13px] font-medium text-white/80">知识星图</p>
+            <p className="mt-0.5 font-mono text-[10px] tracking-[0.08em] text-white/35">Knowledge Constellation</p>
+            <h3 className="mt-2.5 text-[1.1rem] font-semibold leading-7 text-white">
               {domainMeta[activeDomain].label}
-              <span className="ml-2 text-[13px] font-medium text-white/66">星域</span>
+              <span className="ml-2 text-[13px] font-medium text-white/60">星域</span>
             </h3>
-            <p className="mt-2 max-w-[300px] text-[13px] leading-6 text-white/72">{domainMeta[activeDomain].description}</p>
+            <p className="mt-1.5 max-w-[300px] text-[13px] leading-6 text-white/68">{domainMeta[activeDomain].description}</p>
           </div>
-          <div className="hidden shrink-0 rounded-[16px] bg-white/[0.06] px-4 py-3 sm:block">
-            <p className="text-[10px] uppercase tracking-[0.12em] text-white/64">进度</p>
+          <div className="hidden shrink-0 rounded-[8px] bg-white/[0.05] px-3.5 py-2.5 sm:block">
+            <p className="text-[10px] text-white/55">进度</p>
             <p className="mt-1 text-base font-semibold text-white">{activeStats.notedCount}/{activeStats.total}</p>
           </div>
         </div>
         <div className="mt-4 flex flex-wrap gap-2.5">
           {LEGEND.map((item) => (
-            <span key={item.label} className="inline-flex min-h-8 items-center gap-2 rounded-full bg-white/[0.06] px-3.5 py-1.5 text-[11px] text-white/78">
+            <span key={item.label} className="inline-flex items-center gap-2 rounded-[6px] bg-white/[0.05] px-3 py-1.5 text-[11px] text-white/70">
               <span className={`h-2 w-2 rounded-full ${item.tone}`} />
               {item.label}
             </span>
@@ -289,20 +290,20 @@ export default function KnowledgeGraph({ activeDomain, highlightNodeId, litNodeI
       </motion.div>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#101827]/74 via-[#101827]/20 to-transparent" />
-      <div className="absolute bottom-5 left-5 max-w-[252px] rounded-[16px] bg-[rgba(15,22,38,0.8)] px-4 py-3 text-[12px] leading-5 text-white/74 backdrop-blur-md sm:max-w-none">
+      <div className="absolute bottom-5 left-5 max-w-[252px] rounded-[8px] bg-[rgba(15,22,38,0.82)] px-3.5 py-2.5 text-[12px] leading-5 text-white/65 backdrop-blur-md sm:max-w-none">
         <div className="flex items-start gap-2.5">
           <Compass size={14} className="mt-0.5 shrink-0 text-cyan-200/90" />
           <span>拖拽平移 · 滚轮缩放 · 点击节点进入笔记</span>
         </div>
       </div>
       <div className="absolute bottom-5 right-5 flex items-center gap-2">
-        <button onClick={() => setCam((p) => ({ ...p, x: -domainMeta[activeDomain].center.x, y: -domainMeta[activeDomain].center.y, s: 1.15 }))} className="flex h-10 w-10 items-center justify-center rounded-[16px] bg-[rgba(15,22,38,0.78)] text-white/78 backdrop-blur-md transition duration-200 hover:bg-cyan-400/[0.12] hover:text-white">
+        <button onClick={() => setCam((p) => ({ ...p, x: -domainMeta[activeDomain].center.x, y: -domainMeta[activeDomain].center.y, s: 1.15 }))} className="flex h-9 w-9 items-center justify-center rounded-[8px] bg-[rgba(15,22,38,0.82)] text-white/70 backdrop-blur-md transition duration-200 hover:bg-cyan-400/[0.1] hover:text-white">
           <RotateCcw size={14} />
         </button>
-        <button onClick={() => setCam((p) => ({ ...p, s: Math.min(3, p.s * 1.2) }))} className="flex h-10 w-10 items-center justify-center rounded-[16px] bg-[rgba(15,22,38,0.78)] text-white/78 backdrop-blur-md transition duration-200 hover:bg-cyan-400/[0.12] hover:text-white">
+        <button onClick={() => setCam((p) => ({ ...p, s: Math.min(3, p.s * 1.2) }))} className="flex h-9 w-9 items-center justify-center rounded-[8px] bg-[rgba(15,22,38,0.82)] text-white/70 backdrop-blur-md transition duration-200 hover:bg-cyan-400/[0.1] hover:text-white">
           <ZoomIn size={14} />
         </button>
-        <button onClick={() => setCam((p) => ({ ...p, s: Math.max(0.35, p.s / 1.2) }))} className="flex h-10 w-10 items-center justify-center rounded-[16px] bg-[rgba(15,22,38,0.78)] text-white/78 backdrop-blur-md transition duration-200 hover:bg-cyan-400/[0.12] hover:text-white">
+        <button onClick={() => setCam((p) => ({ ...p, s: Math.max(0.35, p.s / 1.2) }))} className="flex h-9 w-9 items-center justify-center rounded-[8px] bg-[rgba(15,22,38,0.82)] text-white/70 backdrop-blur-md transition duration-200 hover:bg-cyan-400/[0.1] hover:text-white">
           <ZoomOut size={14} />
         </button>
       </div>

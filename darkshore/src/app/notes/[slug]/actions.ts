@@ -116,3 +116,26 @@ export async function saveNoteDraft(input: SaveNoteInput) {
   return { ok: true, noteId: note.id, updatedAt: note.updatedAt.toISOString() };
 }
 
+export async function deleteNote(noteId: string, slug: string) {
+  if (!noteId) throw new Error("缺少 noteId");
+
+  const note = await prisma.note.findUnique({ where: { id: noteId }, select: { nodeId: true } });
+  if (!note) throw new Error("笔记不存在");
+
+  await prisma.note.delete({ where: { id: noteId } });
+
+  // 如果该节点下没有笔记了，把节点状态改回 available
+  const remaining = await prisma.note.count({ where: { nodeId: note.nodeId } });
+  if (remaining === 0) {
+    await prisma.knowledgeNode.update({
+      where: { id: note.nodeId },
+      data: { isMastered: false, status: "available" },
+    });
+  }
+
+  revalidatePath(`/notes/${slug}`);
+  revalidatePath("/");
+
+  return { ok: true };
+}
+

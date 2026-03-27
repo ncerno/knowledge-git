@@ -25,8 +25,8 @@ function createPetal(canvasWidth: number, canvasHeight: number): Petal {
     speedX: (Math.random() - 0.5) * 0.18,
     rotation: Math.random() * Math.PI * 2,
     rotationSpeed: (Math.random() - 0.5) * 0.006,
-    opacity: Math.random() * 0.5 + 0.2,
-    opacitySpeed: Math.random() * 0.003 + 0.001,
+    opacity: Math.random() * 0.3 + 0.1,
+    opacitySpeed: Math.random() * 0.002 + 0.0005,
     opacityDir: 1,
     shape: (["ellipse", "diamond", "teardrop"] as const)[Math.floor(Math.random() * 3)],
   };
@@ -76,7 +76,7 @@ export default function PetalCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const PETAL_COUNT = 38;
+    const PETAL_COUNT = 18;
 
     const resize = () => {
       canvas.width = window.innerWidth;

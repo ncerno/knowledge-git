@@ -28,7 +28,7 @@ export default function MobileSidebar({ activeDomain, onSelectDomain, litCount =
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex min-h-11 items-center gap-2 rounded-[16px] bg-[rgba(255,255,255,0.06)] px-4 py-2.5 text-[13px] text-white/82 backdrop-blur-xl transition hover:bg-white/[0.09] hover:text-white lg:hidden"
+        className="flex min-h-11 items-center gap-2 rounded-[8px] bg-[rgba(255,255,255,0.06)] px-4 py-2.5 text-[13px] text-white/82 backdrop-blur-xl transition hover:bg-white/[0.09] hover:text-white lg:hidden"
       >
         <Menu size={16} className="text-cyan-200/90" />
         导航
@@ -47,7 +47,7 @@ export default function MobileSidebar({ activeDomain, onSelectDomain, litCount =
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3.5">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-cyan-400/[0.08]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-cyan-400/[0.08]">
                     <Anchor size={18} className="text-cyan-200" />
                   </div>
                   <div className="pr-2">
@@ -55,13 +55,14 @@ export default function MobileSidebar({ activeDomain, onSelectDomain, litCount =
                     <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-200/70">Mobile Console</p>
                   </div>
                 </div>
-                <button onClick={() => setOpen(false)} className="rounded-[14px] bg-white/[0.06] p-2.5 text-white/70">
+                <button onClick={() => setOpen(false)} className="rounded-[8px] bg-white/[0.06] p-2.5 text-white/70">
                   <X size={16} />
                 </button>
               </div>
 
-              <div className="mt-4 rounded-[18px] bg-white/[0.05] p-4">
-                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/60">当前观测</p>
+              <div className="mt-4 rounded-[10px] bg-white/[0.05] p-4">
+                <p className="text-[12px] font-medium text-white/65">当前观测</p>
+                <p className="mt-0.5 font-mono text-[10px] tracking-[0.08em] text-white/35">Current Domain</p>
                 <p className="mt-2 text-[18px] font-semibold text-white">{domainMeta[activeDomain].label}</p>
                 <p className="mt-1.5 text-[13px] leading-6 text-white/72">{domainMeta[activeDomain].description}</p>
                 <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-3.5 py-2 text-[12px] text-white/78">
@@ -80,13 +81,13 @@ export default function MobileSidebar({ activeDomain, onSelectDomain, litCount =
                         onSelectDomain(key);
                         setOpen(false);
                       }}
-                      className={`flex w-full items-center gap-3 rounded-[16px] px-4 py-3.5 text-left transition ${
+                      className={`flex w-full items-center gap-3 rounded-[10px] px-4 py-3.5 text-left transition ${
                         active
                           ? "bg-cyan-400/[0.12]"
                           : "bg-white/[0.05] hover:bg-white/[0.08]"
                       }`}
                     >
-                      <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-white/[0.07]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-white/[0.07]">
                         <Icon size={16} className={active ? "text-cyan-200" : "text-white/78"} />
                       </div>
                       <div className="min-w-0 pr-1">
@@ -98,9 +99,10 @@ export default function MobileSidebar({ activeDomain, onSelectDomain, litCount =
                 })}
               </div>
 
-              <div className="mt-auto rounded-[18px] bg-white/[0.05] p-4">
-                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/60">航行提示</p>
-                <p className="mt-2 text-[13px] leading-6 text-white/72">移动端优先浏览星图与最近信号；进入节点后可直接撰写或阅读笔记。</p>
+              <div className="mt-auto rounded-[10px] bg-white/[0.05] p-4">
+                <p className="text-[12px] font-medium text-white/65">使用提示</p>
+                <p className="mt-0.5 font-mono text-[10px] tracking-[0.08em] text-white/35">Quick Tips</p>
+                <p className="mt-2 text-[13px] leading-6 text-white/68">移动端优先浏览星图与最近信号；进入节点后可直接撰写或阅读笔记。</p>
               </div>
             </motion.div>
           </motion.div>

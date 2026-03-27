@@ -52,10 +52,10 @@ export default function ChatPanel() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.92, opacity: 0 }}
             onClick={() => setOpen(true)}
-            className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-white/[0.1] bg-[rgba(8,14,26,0.82)] shadow-[0_16px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl transition duration-200 hover:border-cyan-400/18 hover:bg-[rgba(10,18,32,0.9)]"
+            className="fixed bottom-5 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-[10px] border border-white/[0.08] bg-[rgba(8,14,26,0.85)] shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl transition duration-200 hover:border-cyan-400/14 hover:bg-[rgba(10,18,32,0.92)]"
           >
-            <MessageCircle size={20} className="text-cyan-300/88" />
-            <span className="absolute -right-0.5 top-0.5 h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_14px_rgba(103,232,249,0.7)]" />
+            <MessageCircle size={18} className="text-cyan-300/80" />
+            <span className="absolute -right-0.5 top-0.5 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,0.5)]" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -66,44 +66,44 @@ export default function ChatPanel() {
             initial={{ opacity: 0, y: 20, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.97 }}
-            className="fixed bottom-5 right-5 z-50 flex h-[min(78vh,620px)] w-[calc(100vw-24px)] max-w-[410px] flex-col overflow-hidden rounded-[28px] border border-white/[0.08] bg-[rgba(8,14,26,0.94)] shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-2xl"
+            className="fixed bottom-5 right-5 z-50 flex h-[min(78vh,620px)] w-[calc(100vw-24px)] max-w-[410px] flex-col overflow-hidden rounded-[14px] border border-white/[0.08] bg-[rgba(8,14,26,0.94)] shadow-[0_24px_80px_rgba(0,0,0,0.42)] backdrop-blur-2xl"
           >
             <div className="border-b border-white/[0.08] px-4 py-4 sm:px-5">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-cyan-400/14 bg-cyan-400/[0.06]">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-[8px] border border-cyan-400/12 bg-cyan-400/[0.05]">
                     <Anchor size={16} className="text-cyan-300/82" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white/86">守岸人的栖身之所</p>
-                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.22em] text-white/28">Cognitive Interface · Online</p>
+                    <p className="text-sm font-medium text-white/82">守岸人</p>
+                    <p className="mt-0.5 font-mono text-[10px] tracking-[0.08em] text-white/30">AI Assistant · Online</p>
                   </div>
                 </div>
-                <button onClick={() => setOpen(false)} className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-2 text-white/34 transition hover:text-white/72">
+                <button onClick={() => setOpen(false)} className="rounded-[8px] border border-white/[0.07] bg-white/[0.03] p-2 text-white/34 transition hover:text-white/72">
                   <X size={16} />
                 </button>
               </div>
-              <p className="mt-3 text-xs leading-5 text-white/42">你可以向守岸人询问学习路径、节点理解、笔记整理方向或当前星域的下一步建议。</p>
+              <p className="mt-2.5 text-xs leading-5 text-white/45">向守岸人提问学习路径、节点理解或笔记整理方向。</p>
             </div>
 
             <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4 sm:px-5">
               {messages.length === 0 && (
-                <div className="flex h-full flex-col justify-center rounded-[24px] border border-dashed border-white/[0.08] bg-white/[0.02] px-5 py-8 text-center">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-400/14 bg-cyan-400/[0.06]">
+                <div className="flex h-full flex-col justify-center rounded-[10px] border border-dashed border-white/[0.07] bg-white/[0.02] px-5 py-8 text-center">
+                  <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-[8px] border border-cyan-400/12 bg-cyan-400/[0.05]">
                     <Sparkles size={20} className="text-cyan-300/68" />
                   </div>
-                  <p className="mt-4 text-sm text-white/70">你好，我是守岸人。</p>
-                  <p className="mt-2 text-xs leading-6 text-white/38">从技术问题到学习航线，从节点理解到笔记整理，我会在这片黑海岸里为你保持信号通畅。</p>
+                  <p className="mt-4 text-sm text-white/65">你好，我是守岸人。</p>
+                  <p className="mt-2 text-xs leading-6 text-white/40">从技术问题到学习航线，我会在这片黑海岸为你保持信号通畅。</p>
                 </div>
               )}
 
               {messages.map((msg, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div className={`flex max-w-[88%] gap-2 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
-                    <div className={`mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border ${msg.role === "user" ? "border-cyan-400/18 bg-cyan-400/[0.08]" : "border-white/[0.08] bg-white/[0.04]"}`}>
+                    <div className={`mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] border ${msg.role === "user" ? "border-cyan-400/14 bg-cyan-400/[0.06]" : "border-white/[0.07] bg-white/[0.03]"}`}>
                       {msg.role === "user" ? <MessageCircle size={13} className="text-cyan-200/90" /> : <Bot size={13} className="text-white/62" />}
                     </div>
-                    <div className={`rounded-[20px] px-3.5 py-3 text-xs leading-6 ${msg.role === "user" ? "rounded-br-md border border-cyan-400/16 bg-cyan-400/[0.1] text-cyan-50/92" : "rounded-bl-md border border-white/[0.08] bg-white/[0.04] text-white/74"}`}>
+                    <div className={`rounded-[10px] px-3.5 py-2.5 text-xs leading-6 ${msg.role === "user" ? "rounded-br-sm border border-cyan-400/14 bg-cyan-400/[0.08] text-cyan-50/90" : "rounded-bl-sm border border-white/[0.07] bg-white/[0.035] text-white/72"}`}>
                       <p className="whitespace-pre-wrap">{msg.content}</p>
                     </div>
                   </div>
@@ -121,7 +121,7 @@ export default function ChatPanel() {
             </div>
 
             <div className="border-t border-white/[0.08] px-4 py-3 sm:px-5 sm:py-4">
-              <div className="rounded-[22px] border border-white/[0.08] bg-white/[0.03] px-3 py-3 transition focus-within:border-cyan-400/16 focus-within:bg-white/[0.045]">
+              <div className="rounded-[10px] border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 transition focus-within:border-cyan-400/14 focus-within:bg-white/[0.04]">
                 <div className="flex items-end gap-3">
                   <input
                     value={input}
@@ -134,7 +134,7 @@ export default function ChatPanel() {
                   <button
                     onClick={sendMessage}
                     disabled={loading || !input.trim()}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-cyan-400/16 bg-cyan-400/[0.08] text-cyan-200/78 transition duration-200 hover:text-cyan-100 disabled:cursor-not-allowed disabled:opacity-35"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] border border-cyan-400/14 bg-cyan-400/[0.06] text-cyan-200/75 transition duration-200 hover:text-cyan-100 disabled:cursor-not-allowed disabled:opacity-35"
                   >
                     <Send size={15} />
                   </button>

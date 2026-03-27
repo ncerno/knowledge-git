@@ -11,6 +11,7 @@ import ChatPanel from "@/components/ChatPanel";
 import Heatmap from "@/components/Heatmap";
 import SyncRadar from "@/components/SyncRadar";
 import RecentSignals from "@/components/RecentSignals";
+import ShoreButterfly from "@/components/ShoreButterfly";
 import { domainMeta, initialRoadmaps, type NodeCategory } from "@/lib/data/initialRoadmaps";
 
 interface StatsData {
@@ -58,33 +59,38 @@ export default function HomePage() {
         <motion.header
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          className="shore-panel px-6 py-6 sm:px-7 sm:py-7 lg:px-8 lg:py-8"
+          className="shore-panel px-6 py-5 sm:px-7 sm:py-6 lg:px-8 lg:py-7"
         >
-          <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
+          <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
             <div className="max-w-[780px]">
               <div className="mb-4 flex items-center gap-3 lg:hidden">
                 <MobileSidebar activeDomain={activeDomain} onSelectDomain={setActiveDomain} litCount={nodeStats.notedCount} />
-                <div className="shore-badge min-h-10 text-[11px] text-white/78 backdrop-blur-md">
+                <div className="shore-badge text-[11px] text-white/78">
                   <Telescope size={13} className="text-cyan-300/90" />
-                  <span className="font-mono uppercase tracking-[0.12em] text-cyan-200">{domainMeta[activeDomain].label}</span>
+                  <span className="font-mono uppercase tracking-[0.1em] text-cyan-200">{domainMeta[activeDomain].label}</span>
                 </div>
               </div>
-              <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.18em] text-cyan-200/70">Darkshore · Knowledge Observatory</p>
-              <h1 className="pr-3 text-[2.15rem] font-semibold leading-[1.16] tracking-[-0.025em] text-white sm:text-[2.35rem] lg:text-[2.8rem]">黑海岸 · 守望站</h1>
-              <p className="mt-4 max-w-[660px] text-[15px] leading-7 text-white/72 lg:text-[16px]">
+              <div className="flex items-center gap-3">
+                <div>
+                  <h1 className="pr-3 text-[2rem] font-semibold leading-[1.16] tracking-[-0.025em] text-white sm:text-[2.2rem] lg:text-[2.6rem]">黑海岸 · 守望站</h1>
+                  <p className="mt-1 font-mono text-[11px] tracking-[0.12em] text-cyan-200/50">Darkshore · Knowledge Observatory</p>
+                </div>
+                <ShoreButterfly className="ml-2 hidden sm:block" />
+              </div>
+              <p className="mt-3 max-w-[660px] text-[14px] leading-7 text-white/68 lg:text-[15px]">
                 在深海与星潮之间梳理你的学习航线。聚焦一片星域，观察知识节点、笔记沉淀与最近的信号流动。
               </p>
             </div>
 
             <div className="flex w-full flex-col gap-3 xl:w-[448px] xl:items-end">
               <GlobalSearch onNavigateNode={handleNavigateNode} />
-              <div className="hidden flex-wrap items-center gap-3 lg:flex">
-                <div className="shore-badge min-h-10 text-[11px] text-white/78 backdrop-blur-md">
+              <div className="hidden flex-wrap items-center gap-2.5 lg:flex">
+                <div className="shore-badge text-[11px] text-white/78">
                   <Telescope size={13} className="text-cyan-300/90" />
-                  <span className="font-mono uppercase tracking-[0.12em] text-cyan-200">{domainMeta[activeDomain].label}</span>
+                  <span className="font-mono uppercase tracking-[0.1em] text-cyan-200">{domainMeta[activeDomain].label}</span>
                 </div>
-                <div className="shore-badge min-h-10 text-[11px] text-white/76">
-                  <Orbit size={12} className="text-white/72" />
+                <div className="shore-badge text-[11px] text-white/72">
+                  <Orbit size={12} className="text-white/68" />
                   {nodeStats.notedCount}/{nodeStats.total} 已点亮
                 </div>
               </div>
@@ -92,7 +98,7 @@ export default function HomePage() {
           </div>
         </motion.header>
 
-        <div className="grid min-w-0 flex-1 grid-cols-1 gap-5 2xl:grid-cols-[minmax(0,1fr)_332px] xl:gap-6">
+        <div className="grid min-w-0 flex-1 grid-cols-1 gap-5 2xl:grid-cols-[minmax(0,1fr)_320px] xl:gap-6">
           <div className="flex min-w-0 flex-col gap-4 xl:gap-5">
             <div className="shore-panel min-h-[520px] p-3 lg:p-4">
               <KnowledgeGraph
@@ -107,23 +113,23 @@ export default function HomePage() {
               {KPI_META.map((item) => (
                 <div
                   key={item.label}
-                  className="shore-card px-5 py-4 transition duration-300 hover:border-cyan-400/16 hover:bg-white/[0.06]"
+                  className="shore-card px-4 py-3 transition duration-300 hover:border-cyan-400/12 hover:bg-white/[0.05]"
                 >
-                  <p className="text-[12px] font-medium tracking-[0.08em] text-white/62">{item.label}</p>
-                  <p className={`mt-3 text-[2rem] font-semibold tracking-[-0.02em] ${item.tone}`}>{nodeStats[item.key]}</p>
+                  <p className="text-[12px] font-medium tracking-[0.06em] text-white/65">{item.label}</p>
+                  <p className={`mt-2 text-[1.5rem] font-semibold tracking-[-0.02em] ${item.tone}`}>{nodeStats[item.key]}</p>
                 </div>
               ))}
             </div>
           </div>
 
           <aside className="flex min-w-0 flex-col gap-4 xl:gap-5">
-            <div className="shore-panel p-5">
+            <div className="shore-panel p-4">
               <Heatmap data={stats?.heatmap || {}} />
             </div>
-            <div className="shore-panel p-5">
+            <div className="shore-panel p-4">
               <SyncRadar data={stats?.radar || {}} />
             </div>
-            <div className="shore-panel p-5">
+            <div className="shore-panel p-4">
               <RecentSignals notes={stats?.recentNotes || []} />
             </div>
           </aside>

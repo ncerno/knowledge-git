@@ -38,7 +38,7 @@ export default function RootLayout({
           className="pointer-events-none fixed inset-0 z-10"
           style={{
             background:
-              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,229,255,0.015) 2px, rgba(0,229,255,0.015) 4px)",
+              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,229,255,0.006) 2px, rgba(0,229,255,0.006) 4px)",
           }}
         />
         <main className="relative z-20 min-h-screen overflow-x-hidden">

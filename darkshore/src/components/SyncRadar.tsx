@@ -34,11 +34,11 @@ export default function SyncRadar({ data }: Props) {
     <div>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/30">领域同步率</p>
-          <p className="mt-2 text-xs leading-5 text-white/42">观察五大星域的笔记沉淀分布，识别当前薄弱区域。</p>
+          <p className="text-[12px] font-medium text-white/60">领域同步率</p>
+          <p className="mt-0.5 font-mono text-[10px] tracking-[0.08em] text-white/30">Domain Sync</p>
         </div>
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-right">
-          <p className="text-[10px] uppercase tracking-[0.14em] text-white/28">峰值</p>
+        <div className="rounded-[8px] border border-white/[0.07] bg-white/[0.03] px-3 py-2 text-right">
+          <p className="text-[10px] text-white/40">峰值</p>
           <p className="mt-1 text-sm font-semibold text-white/86">{maxVal}</p>
         </div>
       </div>
@@ -55,9 +55,9 @@ export default function SyncRadar({ data }: Props) {
       </svg>
       <div className="mt-3 grid grid-cols-5 gap-1 text-center">
         {axes.map((a) => (
-          <div key={a.key} className="rounded-xl border border-white/[0.05] bg-white/[0.02] px-1 py-2 text-[10px]">
-            <p className="text-white/26">{a.meta.label.slice(0, 2)}</p>
-            <span className="mt-1 block text-cyan-300/62">{data[a.key] || 0}</span>
+          <div key={a.key} className="rounded-[6px] border border-white/[0.05] bg-white/[0.02] px-1 py-2 text-[10px]">
+            <p className="text-white/35">{a.meta.label.slice(0, 2)}</p>
+            <span className="mt-1 block text-cyan-300/58">{data[a.key] || 0}</span>
           </div>
         ))}
       </div>
