@@ -4,6 +4,8 @@ import NoteEditor from "@/components/NoteEditor";
 import { prisma } from "@/lib/db";
 import { initialRoadmaps } from "@/lib/data/initialRoadmaps";
 
+export const dynamic = "force-dynamic";
+
 interface NotePageProps {
   params: Promise<{ slug: string }>;
 }

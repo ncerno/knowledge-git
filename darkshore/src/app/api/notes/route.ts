@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 // GET: 获取笔记列表（?nodeId= 过滤特定节点的笔记）
 export async function GET(req: NextRequest) {
   try {

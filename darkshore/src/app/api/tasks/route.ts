@@ -4,6 +4,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 // GET: 获取所有任务（支持 ?status=pending 过滤）
 export async function GET(req: NextRequest) {
   try {

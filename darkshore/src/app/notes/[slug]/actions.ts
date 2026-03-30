@@ -125,12 +125,14 @@ export async function deleteNote(noteId: string, slug: string) {
   await prisma.note.delete({ where: { id: noteId } });
 
   // 如果该节点下没有笔记了，把节点状态改回 available
-  const remaining = await prisma.note.count({ where: { nodeId: note.nodeId } });
-  if (remaining === 0) {
-    await prisma.knowledgeNode.update({
-      where: { id: note.nodeId },
-      data: { isMastered: false, status: "available" },
-    });
+  if (note.nodeId) {
+    const remaining = await prisma.note.count({ where: { nodeId: note.nodeId } });
+    if (remaining === 0) {
+      await prisma.knowledgeNode.update({
+        where: { id: note.nodeId },
+        data: { isMastered: false, status: "available" },
+      });
+    }
   }
 
   revalidatePath(`/notes/${slug}`);

@@ -200,7 +200,7 @@ export default function NoteEditor({ slug, nodeId, nodeTitle, nodeCategory, init
 
   useEffect(() => {
     if (!editor) return;
-    editor.commands.setContent(activeNote?.content || "", false);
+    editor.commands.setContent(activeNote?.content || "", { emitUpdate: false });
     setTitle(activeNote?.title || "");
     setLinkPreview(createPreview((activeNote?.content || "").match(/https?:\/\/[^\s<]+/i)?.[0] || ""));
   }, [editor, activeNote]);

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { renderSummaryMarkdown } from "@/lib/summaryMarkdown";
 
+export const dynamic = "force-dynamic";
+
 const INTERNAL_SECRET = process.env.INTERNAL_API_SECRET || "darkshore-amethyst-2025";
 
 function checkSecret(req: NextRequest) {
