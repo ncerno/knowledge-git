@@ -51,7 +51,7 @@ export default function Sidebar({ activeDomain, onSelectDomain }: SidebarProps) 
     <motion.aside
       className="relative z-30 hidden h-[calc(100vh-32px)] shrink-0 flex-col overflow-hidden rounded-[14px] border border-white/[0.06] bg-[rgba(15,22,38,0.88)] backdrop-blur-xl lg:flex"
       animate={{ width: collapsed ? 88 : 298 }}
-      transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] as const }}
     >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/25 to-transparent" />
 
