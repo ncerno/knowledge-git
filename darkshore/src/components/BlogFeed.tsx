@@ -21,7 +21,7 @@ interface FeedNote {
   tags: string;
   wordCount: number;
   nodeId: string | null;
-  node: { id: string; title: string; category: string } | null;
+  node: { id: string; title: string; category: string; slug?: string | null } | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -96,13 +96,6 @@ export default function BlogFeed() {
             );
           })}
         </div>
-        <Link
-          href="/write"
-          className="flex items-center gap-2 rounded-[8px] border border-cyan-400/16 bg-cyan-400/[0.07] px-4 py-2 text-[13px] font-medium text-cyan-200 transition hover:bg-cyan-400/[0.12]"
-        >
-          <PenLine size={14} />
-          写文章
-        </Link>
       </div>
 
       {/* 文章列表 */}
@@ -129,7 +122,7 @@ export default function BlogFeed() {
                 transition={{ delay: i * 0.04, duration: 0.3 }}
                 className="shore-card group cursor-pointer overflow-hidden transition duration-300 hover:border-cyan-400/14 hover:bg-white/[0.05]"
               >
-                <Link href={isNodeNote && note.node ? `/notes/${note.nodeId}` : `/post/${note.id}`} className="block p-5">
+                <Link href={isNodeNote && note.node ? `/notes/${note.node.slug || note.nodeId}` : `/post/${note.id}`} className="block p-5">
                   {/* 类型标签 */}
                   <div className="mb-3 flex items-center gap-2">
                     {isNodeNote ? (

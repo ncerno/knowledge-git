@@ -44,9 +44,10 @@ html, body {
 
 body {
   background-image:
-    radial-gradient(circle at 20% 18%, rgba(34,211,238,0.07), transparent 26%),
-    radial-gradient(circle at 82% 16%, rgba(59,130,246,0.05), transparent 22%),
-    linear-gradient(180deg, rgba(255,255,255,0.02), transparent 34%);
+    radial-gradient(circle at 20% 18%, rgba(34,211,238,0.12), transparent 40%),
+    radial-gradient(circle at 82% 16%, rgba(59,130,246,0.09), transparent 36%),
+    radial-gradient(circle at 65% 80%, rgba(99,102,241,0.06), transparent 30%),
+    linear-gradient(180deg, rgba(255,255,255,0.025), transparent 50%);
 }
 
 /* ── 大容器呼吸空间 ── */

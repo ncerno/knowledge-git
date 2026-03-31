@@ -52,7 +52,7 @@ export default function ObservatoryPage() {
   }, []);
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-[1720px] gap-5 px-5 py-5 lg:gap-6 lg:px-6 lg:py-6 xl:gap-7 xl:px-7">
+    <div className="mx-auto flex min-h-screen w-full max-w-[1440px] gap-5 px-5 py-5 lg:gap-6 lg:px-6 lg:py-6 xl:gap-7 xl:px-7">
       <Sidebar activeDomain={activeDomain} onSelectDomain={setActiveDomain} />
 
       <section className="flex min-w-0 flex-1 flex-col gap-5 lg:gap-6 xl:gap-7">

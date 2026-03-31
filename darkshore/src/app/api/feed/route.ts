@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
         skip,
         take: limit,
         include: {
-          node: { select: { id: true, title: true, category: true } },
+          node: { select: { id: true, title: true, category: true, slug: true } },
         },
       }),
       prisma.note.count({ where }),
