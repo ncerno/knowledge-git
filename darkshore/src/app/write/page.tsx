@@ -39,6 +39,7 @@ export default function WritePage() {
   const [noteId, setNoteId] = useState<string | null>(null);
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({ codeBlock: false }),
       Placeholder.configure({ placeholder: "开始书写你的想法..." }),
