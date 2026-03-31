@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Settings, Anchor, ChevronLeft, FileText, BarChart3, Code2, Server, Brain, Gamepad2, Sparkles } from "lucide-react";
+import { Anchor, ChevronLeft, FileText, BarChart3, Code2, Server, Brain, Gamepad2, Sparkles } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import { domainMeta, initialRoadmaps, type NodeCategory } from "@/lib/data/initialRoadmaps";
 import { renderSummaryMarkdown } from "@/lib/summaryMarkdown";
@@ -189,12 +189,7 @@ export default function Sidebar({ activeDomain, onSelectDomain }: SidebarProps) 
         </div>
       )}
 
-      <div className="mt-auto border-t border-white/[0.05] px-4 py-4">
-        <button className="flex w-full items-center gap-3 rounded-[10px] bg-white/[0.04] px-4 py-3 text-left text-white/68 transition hover:bg-cyan-400/[0.06] hover:text-white">
-          <Settings size={15} />
-          {!collapsed && <span className="text-sm font-medium">系统设置</span>}
-        </button>
-      </div>
+
     </motion.aside>
   );
 }
