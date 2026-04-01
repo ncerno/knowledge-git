@@ -31,37 +31,37 @@ export default function StarfieldBackground() {
     };
 
     const generateStars = () => {
-      const count = Math.floor((canvas.width * canvas.height) / 3500);
+      const count = Math.floor((canvas.width * canvas.height) / 5000);
       starsRef.current = Array.from({ length: count }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: Math.random() * 1.4 + 0.2,
-        opacity: Math.random() * 0.6 + 0.1,
-        twinkleSpeed: Math.random() * 0.008 + 0.002,
+        r: Math.random() * 1.2 + 0.15,
+        opacity: Math.random() * 0.4 + 0.08,
+        twinkleSpeed: Math.random() * 0.006 + 0.001,
         twinkleOffset: Math.random() * Math.PI * 2,
-        drift: (Math.random() - 0.5) * 0.08,
+        drift: (Math.random() - 0.5) * 0.05,
       }));
     };
 
     const drawNebula = (t: number) => {
-      // 深邃星云背景渐变
+      // 深邃星云背景渐变（更柔和）
       const grad = ctx.createRadialGradient(
         canvas.width * 0.3, canvas.height * 0.4, 0,
         canvas.width * 0.3, canvas.height * 0.4, canvas.width * 0.7
       );
-      grad.addColorStop(0, "rgba(0,60,120,0.08)");
-      grad.addColorStop(0.5, "rgba(0,20,60,0.04)");
+      grad.addColorStop(0, "rgba(0,60,120,0.05)");
+      grad.addColorStop(0.5, "rgba(0,20,60,0.02)");
       grad.addColorStop(1, "transparent");
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // 第二个星云点
-      const pulse = Math.sin(t * 0.0005) * 0.03;
+      const pulse = Math.sin(t * 0.0005) * 0.015;
       const grad2 = ctx.createRadialGradient(
         canvas.width * 0.75, canvas.height * 0.6, 0,
         canvas.width * 0.75, canvas.height * 0.6, canvas.width * 0.4
       );
-      grad2.addColorStop(0, `rgba(0,200,255,${0.04 + pulse})`);
+      grad2.addColorStop(0, `rgba(0,200,255,${0.025 + pulse})`);
       grad2.addColorStop(1, "transparent");
       ctx.fillStyle = grad2;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -73,12 +73,12 @@ export default function StarfieldBackground() {
         const alpha = star.opacity + twinkle * 0.25;
         const radius = star.r + (twinkle > 0.8 ? 0.5 : 0);
 
-        // 闪光星点的十字光晕
-        if (star.r > 1.1 && twinkle > 0.5) {
+        // 闪光星点的十字光晕（更柔和）
+        if (star.r > 1.0 && twinkle > 0.7) {
           ctx.save();
-          ctx.globalAlpha = alpha * 0.3;
+          ctx.globalAlpha = alpha * 0.15;
           ctx.strokeStyle = "#00e5ff";
-          ctx.lineWidth = 0.5;
+          ctx.lineWidth = 0.4;
           ctx.beginPath();
           ctx.moveTo(star.x - radius * 3, star.y);
           ctx.lineTo(star.x + radius * 3, star.y);

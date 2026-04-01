@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/db";
+
+// 强制动态渲染，避免构建时执行数据库查询
+export const dynamic = "force-dynamic";
 
 // GET /api/status — 系统健康检查
 export async function GET() {
@@ -8,14 +10,16 @@ export async function GET() {
   let dbStatus: "connected" | "error" = "error";
   let dbLatencyMs = -1;
   let noteCount = 0;
-  let skillCount = 0;
+  let nodeCount = 0;
 
   try {
+    // 延迟导入，避免构建时触发 PrismaClient 初始化
+    const { prisma } = await import("@/lib/db");
     const dbStart = Date.now();
     // 轻量探针：计数查询
-    [noteCount, skillCount] = await Promise.all([
+    [noteCount, nodeCount] = await Promise.all([
       prisma.note.count(),
-      prisma.skill.count(),
+      prisma.knowledgeNode.count(),
     ]);
     dbLatencyMs = Date.now() - dbStart;
     dbStatus = "connected";
@@ -41,7 +45,7 @@ export async function GET() {
           engine: "SQLite (Prisma)",
           stats: {
             notes: noteCount,
-            skills: skillCount,
+            nodes: nodeCount,
           },
         },
       },

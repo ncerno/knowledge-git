@@ -24,23 +24,23 @@ export default function GlassCard({
 }: GlassCardProps) {
   return (
     <motion.div
-      className={`relative overflow-hidden rounded-xl ${padding} ${className}`}
+      className={`relative overflow-hidden rounded-[10px] ${padding} ${className}`}
       style={{
-        background: "rgba(13, 21, 38, 0.65)",
-        backdropFilter: "blur(12px) saturate(1.4)",
-        WebkitBackdropFilter: "blur(12px) saturate(1.4)",
-        border: "1px solid rgba(255, 255, 255, 0.10)",
+        background: "rgba(13, 21, 38, 0.68)",
+        backdropFilter: "blur(12px) saturate(1.3)",
+        WebkitBackdropFilter: "blur(12px) saturate(1.3)",
+        border: "1px solid rgba(255, 255, 255, 0.08)",
       }}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] as const }}
       whileHover={
         glowOnHover
           ? {
-              borderColor: "rgba(0, 229, 255, 0.28)",
+              borderColor: "rgba(0, 229, 255, 0.18)",
               boxShadow:
-                "0 0 28px rgba(0,229,255,0.12), 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.07)",
-              backgroundColor: "rgba(0, 229, 255, 0.04)",
+                "0 0 18px rgba(0,229,255,0.08), 0 6px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)",
+              backgroundColor: "rgba(0, 229, 255, 0.03)",
               transition: { duration: 0.25 },
             }
           : undefined
@@ -60,10 +60,10 @@ export default function GlassCard({
 
       {/* 右上角微光角标 */}
       <div
-        className="absolute top-0 right-0 w-16 h-16 pointer-events-none"
+        className="absolute top-0 right-0 w-12 h-12 pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle at top right, rgba(0,229,255,0.06), transparent 70%)",
+            "radial-gradient(circle at top right, rgba(0,229,255,0.04), transparent 70%)",
         }}
       />
 

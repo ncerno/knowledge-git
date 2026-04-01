@@ -1,7 +1,7 @@
-// ──────────────────────────────────────────────
-//  黑海岸·守望站  —  Prisma Schema
-//  数据库：SQLite（本地轻量索引）
-// ──────────────────────────────────────────────
+// --------------------------------------------------
+//  Darkshore - Prisma Schema
+//  SQLite - url configured in prisma.config.ts
+// --------------------------------------------------
 
 generator client {
   provider = "prisma-client-js"
@@ -11,60 +11,95 @@ datasource db {
   provider = "sqlite"
 }
 
-// 笔记索引表（物理文件存储在 /notes/*.md）
+model KnowledgeNode {
+  id             String   @id
+  title          String
+  description    String?
+  category       String
+  depth          Int      @default(1)
+  status         String   @default("locked")
+  isMastered     Boolean  @default(false)
+  slug           String?
+  posX           Float    @default(0)
+  posY           Float    @default(0)
+  weight         Float    @default(1)
+  prerequisiteId String?
+  tags           String   @default("[]")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  notes          Note[]
+  tasks          Task[]
+  @@index([category])
+  @@index([status])
+  @@index([isMastered])
+}
+
 model Note {
   id          String   @id @default(cuid())
-  slug        String   @unique          // 文件名（不含 .md）
   title       String
-  summary     String?                   // AI 摘要（后续阶段）
-  tags        String   @default("[]")  // JSON 数组序列化
-  domain      String?                   // 所属领域
-  filePath    String                    // 物理路径
+  content     String   @default("")
+  summary     String?
+  tags        String   @default("[]")
+  version     Int      @default(1)
+  nodeId      String?
+  node        KnowledgeNode? @relation(fields: [nodeId], references: [id])
   wordCount   Int      @default(0)
-  readingMins Int      @default(0)
-  isMastered  Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  // 关联：笔记 <-> 技能节点（多对多，Phase 2）
-  skills SkillNote[]
+  @@index([nodeId])
+  @@index([createdAt])
 }
 
-// 技能 / Roadmap 节点
-model Skill {
-  id          String      @id @default(cuid())
-  name        String      @unique
-  domain      String                     // 领域分类
-  description String?
-  level       Int         @default(0)   // 0=未开始 1=学习中 2=掌握 3=精通
-  orderIndex  Int         @default(0)
-  parentId    String?                   // 父节点（构成树形 Roadmap）
-  parent      Skill?      @relation("SkillTree", fields: [parentId], references: [id])
-  children    Skill[]     @relation("SkillTree")
-  notes       SkillNote[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+model Task {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  status        String   @default("pending")
+  priority      Int      @default(0)
+  deadline      String?
+  relatedNodeId String?
+  relatedNode   KnowledgeNode? @relation(fields: [relatedNodeId], references: [id])
+  completedAt   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  @@index([status])
+  @@index([relatedNodeId])
 }
 
-// 笔记-技能 中间表
-model SkillNote {
-  noteId  String
-  skillId String
-  note    Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  skill   Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
-
-  @@id([noteId, skillId])
-}
-
-// 学习记录（用于统计热力图和连击天数）
 model StudyLog {
   id        String   @id @default(cuid())
-  date      String                       // YYYY-MM-DD
-  duration  Int      @default(0)        // 分钟
+  date      String
+  duration  Int      @default(0)
+  category  String?
+  nodeId    String?
   noteId    String?
-  tags      String   @default("[]")
+  action    String   @default("note")
+  source    String   @default("manual")
+  inputType String?
+  periodKey String?
+  metadata  String   @default("{}")
   createdAt DateTime @default(now())
-
-  @@unique([date])
+  updatedAt DateTime @updatedAt
+  @@index([date])
+  @@index([category])
+  @@index([action])
+  @@index([nodeId])
 }
 
+model LearningSummary {
+  id          String   @id @default(cuid())
+  type        String
+  period      String
+  title       String   @default("")
+  category    String?
+  content     String   @default("")
+  contentHtml String   @default("")
+  excerpt     String   @default("")
+  source      String   @default("ai")
+  status      String   @default("published")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@unique([type, period])
+  @@index([type, createdAt])
+  @@index([category])
+}
