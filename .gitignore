@@ -1,0 +1,8 @@
+node_modules
+# Keep environment variables out of version control
+.env
+
+/generated/prisma
+
+# roadmap.sh 调研用仓库（不需要推送）
+temp_roadmap/

@@ -1,138 +1,101 @@
- "use client";
- 
- import { motion } from "framer-motion";
- import { BookOpen, Star, Zap, Clock, TrendingUp, Layers, ChevronRight, Radio } from "lucide-react";
- import GlassCard from "@/components/GlassCard";
- import DataWave from "@/components/DataWave";
- 
- const STATS = [
-   { icon: BookOpen, label: "知识笔记", value: "0", unit: "篇", color: "text-cyan-400",   glow: "rgba(0,229,255,0.3)" },
-   { icon: Star,     label: "掌握技能", value: "0", unit: "项", color: "text-blue-400",   glow: "rgba(59,130,246,0.3)" },
-   { icon: Zap,      label: "学习连击", value: "0", unit: "天", color: "text-violet-400", glow: "rgba(139,92,246,0.3)" },
-   { icon: Clock,    label: "专注时长", value: "0", unit: "h",  color: "text-emerald-400",glow: "rgba(52,211,153,0.3)" },
- ];
- 
- const MODULES = [
-   { title: "Roadmap 路径", desc: "规划你的技术成长轨迹",   icon: TrendingUp, status: "即将开放", tag: "PHASE 2" },
-   { title: "知识星图",     desc: "连接知识节点的可视化图谱", icon: Layers,    status: "即将开放", tag: "PHASE 3" },
-   { title: "全文检索",     desc: "跨文档的智能语义搜索",    icon: Radio,     status: "即将开放", tag: "PHASE 2" },
- ];
- 
- const containerVariants = {
-   hidden: {},
-   show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
- };
- const itemVariants = {
-   hidden: { opacity: 0, y: 20 },
-   show:   { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } },
- };
- 
- export default function HomePage() {
-   return (
-     <div className="min-h-full p-6 md:p-8">
-       <motion.div
-         className="max-w-5xl mx-auto flex flex-col gap-8"
-         variants={containerVariants}
-         initial="hidden"
-         animate="show"
-       >
-         {/* 顶部标题 */}
-         <motion.div variants={itemVariants} className="flex items-end justify-between">
-           <div>
-             <p className="text-[10px] font-mono text-cyan-400/60 tracking-[0.25em] uppercase mb-1">
-               // DARKSHORE · SYSTEM ONLINE
-             </p>
-             <h1 className="text-2xl md:text-3xl font-bold text-white/90 leading-tight">
-               守望台
-               <span className="ml-3 text-sm font-normal text-white/35 font-mono">Dashboard</span>
-             </h1>
-             <p className="text-sm text-white/40 mt-1">以知识为灯塔，以星图为路径</p>
-           </div>
-           <DataWave bars={6} height="h-10" color="cyan" label="SIGNAL ACTIVE" />
-         </motion.div>
- 
-         {/* 系统状态栏 */}
-         <motion.div variants={itemVariants}>
-           <GlassCard accentBar padding="px-4 py-3" className="flex items-center gap-3">
-             <motion.div
-               className="w-2 h-2 rounded-full bg-cyan-400"
-               animate={{ opacity: [1, 0.2, 1], scale: [1, 0.8, 1] }}
-               transition={{ duration: 2, repeat: Infinity }}
-             />
-             <p className="text-xs font-mono text-white/50 tracking-wider">
-               SYSTEM STATUS <span className="text-cyan-400">NOMINAL</span>
-               <span className="mx-3 text-white/20">|</span>
-               BACKEND <span className="text-emerald-400">CONNECTED</span>
-               <span className="mx-3 text-white/20">|</span>
-               DATABASE <span className="text-emerald-400">READY</span>
-             </p>
-           </GlassCard>
-         </motion.div>
- 
-         {/* 四项统计卡片 */}
-         <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-4 gap-3">
-           {STATS.map(({ icon: Icon, label, value, unit, color, glow }) => (
-             <GlassCard key={label} accentBar glowOnHover padding="p-4">
-               <div className="flex items-center gap-2 mb-3">
-                 <div
-                   className="w-7 h-7 rounded-lg flex items-center justify-center"
-                   style={{ background: `${glow.replace("0.3", "0.12")}`, border: `1px solid ${glow}` }}
-                 >
-                   <Icon size={13} className={color} />
-                 </div>
-                 <p className="text-[10px] text-white/40 font-medium tracking-wide">{label}</p>
-               </div>
-               <div className="flex items-baseline gap-1">
-                 <span className={`text-2xl font-bold ${color}`} style={{ textShadow: `0 0 16px ${glow}` }}>
-                   {value}
-                 </span>
-                 <span className="text-xs text-white/30">{unit}</span>
-               </div>
-             </GlassCard>
-           ))}
-         </motion.div>
- 
-         {/* 功能模块预览 */}
-         <motion.div variants={itemVariants}>
-           <div className="flex items-center gap-2 mb-3">
-             <div className="h-px flex-1" style={{ background: "linear-gradient(90deg, rgba(0,229,255,0.3), transparent)" }} />
-             <p className="text-[10px] font-mono text-white/30 tracking-[0.2em] uppercase px-2">功能模块</p>
-             <div className="h-px flex-1" style={{ background: "linear-gradient(90deg, transparent, rgba(0,229,255,0.3))" }} />
-           </div>
-           <div className="flex flex-col gap-3">
-             {MODULES.map(({ title, desc, icon: Icon, status, tag }) => (
-               <GlassCard key={title} glowOnHover padding="p-4">
-                 <div className="flex items-center justify-between">
-                   <div className="flex items-center gap-3">
-                     <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-                       style={{ background: "rgba(0,229,255,0.07)", border: "1px solid rgba(0,229,255,0.15)" }}>
-                       <Icon size={15} className="text-cyan-400/70" />
-                     </div>
-                     <div>
-                       <p className="text-sm font-semibold text-white/80">{title}</p>
-                       <p className="text-[11px] text-white/35 mt-0.5">{desc}</p>
-                     </div>
-                   </div>
-                   <div className="flex items-center gap-2">
-                     <span className="text-[9px] font-mono text-cyan-400/50 border border-cyan-400/20 rounded px-1.5 py-0.5 tracking-wider">
-                       {tag}
-                     </span>
-                     <span className="text-[10px] text-white/25">{status}</span>
-                     <ChevronRight size={13} className="text-white/20" />
-                   </div>
-                 </div>
-               </GlassCard>
-             ))}
-           </div>
-         </motion.div>
- 
-         {/* 底部签名 */}
-         <motion.div variants={itemVariants} className="flex justify-center pb-2">
-           <p className="text-[9px] font-mono text-white/15 tracking-[0.3em] uppercase">
-             DARK SHORE · SHOREKEEPER · PHASE I INITIALIZED
-           </p>
-         </motion.div>
-       </motion.div>
-     </div>
-   );
- }
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { PenLine, Map, FileText } from "lucide-react";
+import Link from "next/link";
+import BlogFeed from "@/components/BlogFeed";
+import ShoreButterfly from "@/components/ShoreButterfly";
+import ChatPanel from "@/components/ChatPanel";
+
+interface QuickStats {
+  totalNotes: number;
+  totalLogs: number;
+  litNodes?: string[];
+}
+
+export default function HomePage() {
+  const [stats, setStats] = useState<QuickStats | null>(null);
+
+  useEffect(() => {
+    fetch("/api/stats")
+      .then((r) => r.json())
+      .then((d) => setStats(d))
+      .catch(() => {});
+  }, []);
+
+  const totalWords = stats?.totalLogs || 0;
+
+  return (
+    <div className="mx-auto flex min-h-screen w-full max-w-[860px] flex-col px-5 lg:px-8">
+
+      {/* ===== Hero Section — 极简居中 ===== */}
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="flex flex-col items-center pt-20 pb-16 sm:pt-28 sm:pb-20 lg:pt-36 lg:pb-24"
+      >
+        {/* 蝴蝶 */}
+        <ShoreButterfly className="mb-8 scale-125 sm:scale-150" />
+
+        {/* 标题 */}
+        <h1 className="text-center text-[2rem] font-bold leading-[1.15] tracking-[-0.03em] text-white sm:text-[2.6rem] lg:text-[3.2rem]">
+          深岸守望站
+        </h1>
+        <p className="mt-2 font-mono text-[11px] tracking-[0.18em] text-cyan-200/40 sm:text-[12px]">
+          DARKSHORE · SHOREKEEPER
+        </p>
+
+        {/* Slogan */}
+        <p className="mt-5 max-w-[420px] text-center text-[14px] leading-7 text-white/50 sm:text-[15px]">
+          在深海与星潮之间，梳理你的学习航线
+        </p>
+
+        {/* CTA 按钮 */}
+        <div className="mt-8 flex items-center gap-4">
+          <Link
+            href="/write"
+            className="flex items-center gap-2.5 rounded-[10px] border border-cyan-400/20 bg-cyan-400/[0.08] px-6 py-3 text-[14px] font-medium text-cyan-100 transition duration-300 hover:border-cyan-400/35 hover:bg-cyan-400/[0.14] hover:shadow-[0_0_24px_rgba(34,211,238,0.12)]"
+          >
+            <PenLine size={15} />
+            开始写作
+          </Link>
+          <Link
+            href="/observatory"
+            className="flex items-center gap-2.5 rounded-[10px] border border-white/[0.1] bg-white/[0.04] px-6 py-3 text-[14px] font-medium text-white/65 transition duration-300 hover:border-white/[0.18] hover:bg-white/[0.07] hover:text-white/90"
+          >
+            <Map size={15} />
+            知识星图
+          </Link>
+        </div>
+
+        {/* 轻量统计 */}
+        <div className="mt-10 flex items-center gap-5 text-[12px] text-white/30">
+          <span>{stats?.totalNotes || 0} 篇文章</span>
+          <span className="h-3 w-px bg-white/[0.1]" />
+          <span>{stats?.litNodes?.length || 0} 个节点已点亮</span>
+          <span className="h-3 w-px bg-white/[0.1]" />
+          <span>{totalWords} 条学习记录</span>
+        </div>
+      </motion.section>
+
+      {/* ===== 文章信息流 ===== */}
+      <motion.section
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="pb-16"
+      >
+        <div className="mb-6 flex items-center gap-2.5">
+          <FileText size={15} className="text-white/40" />
+          <h2 className="text-[15px] font-semibold text-white/75">最新动态</h2>
+          <div className="h-px flex-1 bg-gradient-to-r from-white/[0.06] to-transparent" />
+        </div>
+        <BlogFeed />
+      </motion.section>
+
+      <ChatPanel />
+    </div>
+  );
+}
