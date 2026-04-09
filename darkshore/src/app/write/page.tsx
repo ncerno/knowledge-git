@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -31,7 +30,6 @@ import { saveBlogPost } from "./actions";
 const lowlight = createLowlight(common);
 
 export default function WritePage() {
-  const router = useRouter();
   const [title, setTitle] = useState("");
   const [tagInput, setTagInput] = useState("");
   const [saving, startSave] = useTransition();

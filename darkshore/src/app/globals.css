@@ -1,41 +1,44 @@
 @import "tailwindcss";
 
-/* ═══════════════════════════════════════════════
-   守岸人主题  ·  Dark Shore Design System v3
-   圆角体系: 面板 14px · 卡片 10px · 按钮 8px · 胶囊 999px
-   ═══════════════════════════════════════════════ */
 @theme inline {
-  --color-shore-void:    #0a0f1d;
-  --color-shore-deep:    #0d1526;
-  --color-shore-surface: #111827;
-  --color-shore-panel:   #0f1c35;
-  --color-cyan-glow:     #00e5ff;
-  --color-cyan-soft:     #22d3ee;
-  --color-cyan-muted:    #0891b2;
-  --color-cyan-dim:      #164e63;
-  --color-blue-bright:   #3b82f6;
-  --color-blue-mid:      #1d4ed8;
-  --color-blue-deep:     #1e3a5f;
-  --color-white-pure:    #ffffff;
-  --color-white-soft:    rgba(255,255,255,0.85);
-  --color-white-muted:   rgba(255,255,255,0.5);
-  --color-white-dim:     rgba(255,255,255,0.1);
+  --color-shore-void: #07111f;
+  --color-shore-deep: #0b1527;
+  --color-shore-surface: #101a2f;
+  --color-shore-panel: rgba(15, 23, 42, 0.82);
+  --color-shore-panel-solid: #0f1b30;
+  --color-shore-border: rgba(148, 163, 184, 0.16);
+  --color-shore-border-strong: rgba(148, 163, 184, 0.24);
+  --color-shore-muted: rgba(226, 232, 240, 0.66);
+  --color-shore-dim: rgba(226, 232, 240, 0.42);
+  --color-shore-accent: #7dd3fc;
+  --color-shore-accent-strong: #38bdf8;
+  --color-shore-accent-soft: rgba(56, 189, 248, 0.12);
   --font-display: var(--font-sans-rounded), "Noto Sans SC", "PingFang SC", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-sans-rounded), "Noto Sans SC", "PingFang SC", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-ui), "Fira Code", ui-monospace, monospace;
 }
 
-/* ── 全局重置 ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root { color-scheme: dark; scroll-behavior: smooth; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-html, body {
-  height: 100%;
-  background: #101827;
-  color: rgba(255,255,255,0.92);
+:root {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  min-height: 100%;
+  background: #08111d;
+  color: rgba(248, 250, 252, 0.94);
   font-family: var(--font-body);
   font-size: 15px;
-  line-height: 1.65;
+  line-height: 1.7;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -44,288 +47,418 @@ html, body {
 
 body {
   background-image:
-    radial-gradient(circle at 20% 18%, rgba(34,211,238,0.12), transparent 40%),
-    radial-gradient(circle at 82% 16%, rgba(59,130,246,0.09), transparent 36%),
-    radial-gradient(circle at 65% 80%, rgba(99,102,241,0.06), transparent 30%),
-    linear-gradient(180deg, rgba(255,255,255,0.025), transparent 50%);
+    radial-gradient(circle at 20% 10%, rgba(56, 189, 248, 0.09), transparent 26%),
+    radial-gradient(circle at 85% 8%, rgba(99, 102, 241, 0.07), transparent 22%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 22%);
 }
 
-/* ── 大容器呼吸空间 ── */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
 .shore-container {
-  max-width: 1400px;
+  width: 100%;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 0 clamp(1rem, 3vw, 2.5rem);
+  padding: 0 clamp(1rem, 2.6vw, 2rem);
 }
 
 .shore-shell {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1360px;
   margin: 0 auto;
   padding: clamp(1rem, 2vw, 1.5rem);
 }
 
-/* ── 磨砂玻璃 ── */
 .glass {
-  background: rgba(13, 21, 38, 0.6);
-  backdrop-filter: blur(16px) saturate(1.3);
-  -webkit-backdrop-filter: blur(16px) saturate(1.3);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 14px;
-}
-.glass-hover {
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-.glass-hover:hover {
-  background: rgba(0,229,255,0.04);
-  border-color: rgba(0,229,255,0.15);
-  box-shadow: 0 0 20px rgba(0,229,255,0.06), inset 0 1px 0 rgba(255,255,255,0.04);
+  background: rgba(15, 23, 42, 0.74);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 18px;
 }
 
-/* ── 面板语义层 ── */
+.glass-hover {
+  transition: background 0.24s ease, border-color 0.24s ease, transform 0.24s ease, box-shadow 0.24s ease;
+}
+
+.glass-hover:hover {
+  background: rgba(15, 23, 42, 0.82);
+  border-color: rgba(125, 211, 252, 0.24);
+  transform: translateY(-1px);
+  box-shadow: 0 18px 38px rgba(8, 15, 27, 0.22);
+}
+
 .shore-panel {
-  background: rgba(15, 22, 38, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
-  backdrop-filter: blur(16px) saturate(1.1);
-  -webkit-backdrop-filter: blur(16px) saturate(1.1);
-  border-radius: 14px;
+  background: rgba(11, 18, 32, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
 }
 
 .shore-card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
 }
 
 .shore-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: rgba(15, 23, 42, 0.64);
   border-radius: 999px;
-  padding: 0.4rem 0.8rem;
+  padding: 0.45rem 0.85rem;
   font-size: 12px;
 }
 
-@media (max-width: 1279px) {
-  .shore-container {
-    max-width: 100%;
-    padding: 0 1rem;
-  }
+.shore-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, rgba(148, 163, 184, 0.14), rgba(148, 163, 184, 0.04));
+}
 
+.shore-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(186, 230, 253, 0.7);
+}
+
+.shore-hero-title {
+  font-size: clamp(2.2rem, 5vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+  font-weight: 800;
+}
+
+.shore-prose {
+  max-width: none;
+  color: rgba(226, 232, 240, 0.84);
+  font-size: 15px;
+  line-height: 1.95;
+}
+
+.shore-prose h1,
+.shore-prose h2,
+.shore-prose h3,
+.shore-prose h4 {
+  color: rgba(255, 255, 255, 0.96);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.shore-prose h1 {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+}
+
+.shore-prose h2 {
+  margin: 2.25rem 0 0.9rem;
+  font-size: 1.45rem;
+}
+
+.shore-prose h3 {
+  margin: 1.8rem 0 0.7rem;
+  font-size: 1.15rem;
+}
+
+.shore-prose p,
+.shore-prose ul,
+.shore-prose ol,
+.shore-prose blockquote,
+.shore-prose pre,
+.shore-prose img,
+.shore-prose table {
+  margin: 1rem 0;
+}
+
+.shore-prose ul,
+.shore-prose ol {
+  padding-left: 1.25rem;
+}
+
+.shore-prose li {
+  margin: 0.4rem 0;
+}
+
+.shore-prose strong {
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.shore-prose a {
+  color: rgba(125, 211, 252, 0.96);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(125, 211, 252, 0.28);
+}
+
+.shore-prose a:hover {
+  color: rgba(186, 230, 253, 1);
+}
+
+.shore-prose blockquote {
+  border-left: 2px solid rgba(125, 211, 252, 0.38);
+  background: rgba(15, 23, 42, 0.72);
+  border-radius: 0 14px 14px 0;
+  padding: 1rem 1.1rem;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.shore-prose pre,
+.code-block {
+  position: relative;
+  overflow-x: auto;
+  background: rgba(8, 15, 29, 0.94);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 16px;
+  padding: 1rem 1.15rem;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.8;
+  color: rgba(191, 219, 254, 0.92);
+}
+
+.code-block::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.46);
+}
+
+.shore-prose code,
+.inline-code {
+  background: rgba(148, 163, 184, 0.12);
+  border-radius: 6px;
+  padding: 0.15em 0.45em;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  color: rgba(186, 230, 253, 0.96);
+}
+
+.shore-prose pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.summary-prose {
+  color: rgba(226, 232, 240, 0.68);
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.summary-prose h1,
+.summary-prose h2,
+.summary-prose h3,
+.summary-prose strong {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.summary-prose p,
+.summary-prose ul,
+.summary-prose ol,
+.summary-prose blockquote {
+  margin: 0.35rem 0;
+}
+
+.summary-prose blockquote {
+  border-left: 2px solid rgba(125, 211, 252, 0.26);
+  padding-left: 0.7rem;
+}
+
+.editor-content {
+  font-size: 15px;
+  line-height: 1.95;
+  color: rgba(226, 232, 240, 0.84);
+}
+
+.editor-content h1,
+.editor-content h2,
+.editor-content h3,
+.editor-content strong {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.editor-content h1 {
+  margin-top: 1.8rem;
+  font-size: 1.85rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.editor-content h2 {
+  margin-top: 1.45rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.editor-content h3 {
+  margin-top: 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.editor-content p {
+  margin: 0.9rem 0;
+}
+
+.editor-content ul,
+.editor-content ol {
+  margin: 0.85rem 0;
+  padding-left: 1.25rem;
+}
+
+.editor-content li {
+  margin: 0.4rem 0;
+}
+
+.editor-content blockquote {
+  margin: 1rem 0;
+  border-left: 2px solid rgba(125, 211, 252, 0.3);
+  background: rgba(15, 23, 42, 0.66);
+  padding: 0.75rem 1rem;
+  border-radius: 0 12px 12px 0;
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.editor-content pre {
+  margin: 1.1rem 0;
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(8, 15, 29, 0.94);
+  padding: 1rem 1.05rem;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.75;
+  color: rgba(191, 219, 254, 0.94);
+}
+
+.editor-content code {
+  border-radius: 6px;
+  background: rgba(148, 163, 184, 0.12);
+  padding: 0.1em 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  color: rgba(186, 230, 253, 0.96);
+}
+
+.editor-content pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.editor-content img,
+.editor-container .tiptap img {
+  max-width: 100%;
+  border-radius: 14px;
+  margin: 1.1rem 0;
+}
+
+.editor-content a,
+.editor-container .tiptap a {
+  color: rgba(125, 211, 252, 0.9);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(125, 211, 252, 0.26);
+}
+
+.editor-content a:hover,
+.editor-container .tiptap a:hover {
+  color: rgba(186, 230, 253, 1);
+}
+
+.editor-content p.is-editor-empty:first-child::before,
+.editor-container .tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: rgba(226, 232, 240, 0.24);
+  pointer-events: none;
+  height: 0;
+}
+
+.editor-container .tiptap {
+  min-height: 420px;
+  outline: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(125, 211, 252, 0.16);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(125, 211, 252, 0.28);
+}
+
+::selection {
+  background: rgba(56, 189, 248, 0.2);
+  color: #fff;
+}
+
+@media (max-width: 1024px) {
   .shore-shell {
     padding: 1rem;
   }
 }
 
 @media (max-width: 768px) {
-  html, body {
+  html,
+  body {
     font-size: 14px;
   }
 
   .shore-container,
   .shore-shell {
-    padding: 0 0.875rem;
+    padding-left: 0.95rem;
+    padding-right: 0.95rem;
   }
-}
 
+  .shore-panel,
+  .shore-card,
+  .glass {
+    border-radius: 16px;
+  }
 
-/* ── 青色荧光（收敛） ── */
-.text-glow-cyan {
-  color: #00e5ff;
-  text-shadow: 0 0 8px rgba(0,229,255,0.4), 0 0 24px rgba(0,229,255,0.12);
-}
-.glow-breathe {
-  animation: breath-pulse 3s ease-in-out infinite;
-}
+  .shore-hero-title {
+    letter-spacing: -0.04em;
+  }
 
-/* ── 滚动条 ── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.2); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,229,255,0.4); }
-
-/* ── 选中高亮 ── */
-::selection { background: rgba(0,229,255,0.22); color: #fff; }
-
-/* ── 学习总结看板 Markdown 排版 ── */
-.summary-prose h1 { font-size: 1.1rem; font-weight: 700; color: rgba(255,255,255,0.94); margin: 0.6rem 0 0.3rem; line-height: 1.4; }
-.summary-prose h2 { font-size: 0.95rem; font-weight: 700; color: rgba(255,255,255,0.90); margin: 0.5rem 0 0.25rem; line-height: 1.4; }
-.summary-prose h3 { font-size: 0.85rem; font-weight: 600; color: rgba(186,230,253,0.88); margin: 0.4rem 0 0.2rem; line-height: 1.4; }
-.summary-prose p { margin: 0.3rem 0; color: rgba(255,255,255,0.78); }
-.summary-prose strong { color: rgba(255,255,255,0.96); font-weight: 600; }
-.summary-prose em { color: rgba(186,230,253,0.82); font-style: italic; }
-.summary-prose code { background: rgba(255,255,255,0.08); border-radius: 4px; padding: 1px 5px; font-family: var(--font-mono); font-size: 0.88em; color: rgba(103,232,249,0.88); }
-.summary-prose ul, .summary-prose ol { margin: 0.3rem 0 0.3rem 1.1rem; padding: 0; }
-.summary-prose li { margin: 0.15rem 0; color: rgba(255,255,255,0.78); }
-.summary-prose ul li { list-style-type: disc; }
-.summary-prose ol li { list-style-type: decimal; }
-.summary-prose blockquote { border-left: 2px solid rgba(34,211,238,0.45); margin: 0.4rem 0; padding: 0.3rem 0.7rem; color: rgba(255,255,255,0.68); background: rgba(34,211,238,0.04); border-radius: 0 6px 6px 0; }
-.summary-prose a { color: rgba(125,211,252,0.92); text-decoration: underline; text-underline-offset: 2px; }
-.summary-prose a:hover { color: rgba(186,230,253,1); }
-
-/* ── Markdown 代码块 ── */
-.code-block {
-  position: relative;
-  background: rgba(13, 21, 38, 0.85);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 10px;
-  padding: 1.1rem 1.3rem;
-  margin: 1.2rem 0;
-  overflow-x: auto;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  line-height: 1.7;
-  color: rgba(186,230,253,0.88);
-}
-.code-block::before {
-  content: attr(data-lang);
-  position: absolute;
-  top: 8px; right: 14px;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: rgba(0,229,255,0.3);
-}
-.inline-code {
-  background: rgba(255,255,255,0.07);
-  border-radius: 4px;
-  padding: 2px 7px;
-  font-family: var(--font-mono);
-  font-size: 0.87em;
-  color: rgba(103,232,249,0.88);
-}
-
-/* ── 编辑器增强样式 ── */
-.editor-content {
-  font-size: 15px;
-  line-height: 1.85;
-  color: rgba(255,255,255,0.82);
-}
-.editor-content h1 { margin-top: 1.5rem; font-size: 1.75rem; font-weight: 700; color: rgba(255,255,255,0.9); }
-.editor-content h2 { margin-top: 1.25rem; font-size: 1.35rem; font-weight: 600; color: rgba(255,255,255,0.88); }
-.editor-content h3 { margin-top: 1rem; font-size: 1.1rem; font-weight: 500; color: rgba(255,255,255,0.82); }
-.editor-content p { margin: 0.75rem 0; }
-.editor-content ul, .editor-content ol { margin: 0.75rem 0; padding-left: 1.25rem; }
-.editor-content li { margin: 0.4rem 0; }
-.editor-content blockquote {
-  margin: 1rem 0;
-  border-left: 2px solid rgba(34,211,238,0.3);
-  background: rgba(255,255,255,0.02);
-  padding: 0.6rem 1rem;
-  font-style: italic;
-  color: rgba(255,255,255,0.6);
-  border-radius: 0 6px 6px 0;
-}
-.editor-content pre {
-  margin: 1rem 0;
-  overflow-x: auto;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.07);
-  background: #0b1424;
-  padding: 1rem;
-  font-family: monospace;
-  font-size: 13px;
-  line-height: 1.6;
-  color: rgba(186,230,253,0.85);
-}
-.editor-content code {
-  border-radius: 4px;
-  background: rgba(255,255,255,0.07);
-  padding: 0.1em 0.35em;
-  font-family: monospace;
-  font-size: 0.87em;
-  color: rgba(103,232,249,0.85);
-}
-.editor-content pre code {
-  background: none;
-  padding: 0;
-  border-radius: 0;
-}
-.editor-content img {
-  max-width: 100%;
-  border-radius: 8px;
-  margin: 1rem 0;
-}
-.editor-content a {
-  color: rgba(125,211,252,0.85);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-color: rgba(125,211,252,0.25);
-  cursor: pointer;
-  transition: color 0.15s;
-}
-.editor-content a:hover {
-  color: rgba(186,230,253,1);
-  text-decoration-color: rgba(186,230,253,0.45);
-}
-.editor-content p.is-editor-empty:first-child::before {
-  content: attr(data-placeholder);
-  float: left;
-  color: rgba(255,255,255,0.22);
-  pointer-events: none;
-  height: 0;
-}
-.editor-container .tiptap {
-  min-height: 400px;
-  outline: none;
-}
-.editor-container .tiptap p.is-editor-empty:first-child::before {
-  content: attr(data-placeholder);
-  float: left;
-  color: rgba(255,255,255,0.22);
-  pointer-events: none;
-  height: 0;
-}
-.editor-container .tiptap img {
-  max-width: 100%;
-  border-radius: 8px;
-  margin: 1rem 0;
-}
-.editor-container .tiptap a {
-  color: rgba(125,211,252,0.85);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-color: rgba(125,211,252,0.25);
-  cursor: pointer;
-}
-.editor-container .tiptap a:hover {
-  color: rgba(186,230,253,1);
-  text-decoration-color: rgba(186,230,253,0.45);
-}
-
-/* ── 动画关键帧 ── */
-@keyframes wave-bar {
-  0%, 100% { transform: scaleY(0.3); opacity: 0.4; }
-  50%       { transform: scaleY(1.0); opacity: 1.0; }
-}
-@keyframes petal-drift {
-  0%   { transform: translateY(-10px) translateX(0) rotate(0deg); opacity: 0; }
-  10%  { opacity: 0.8; }
-  90%  { opacity: 0.6; }
-  100% { transform: translateY(110vh) translateX(60px) rotate(720deg); opacity: 0; }
-}
-@keyframes star-twinkle {
-  0%, 100% { opacity: 0.2; transform: scale(1); }
-  50%       { opacity: 1.0; transform: scale(1.4); }
-}
-@keyframes breath-pulse {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50%       { opacity: 1.0; transform: scale(1.02); }
-}
-@keyframes scan-line {
-  0%   { transform: translateY(-100%); opacity: 0; }
-  10%  { opacity: 0.15; }
-  90%  { opacity: 0.15; }
-  100% { transform: translateY(100vh); opacity: 0; }
-}
-@keyframes node-light-burst {
-  0%   { transform: scale(0.3); opacity: 1; }
-  50%  { transform: scale(2.5); opacity: 0.6; }
-  100% { transform: scale(4); opacity: 0; }
-}
-@keyframes butterfly-float {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50%      { transform: translateY(-8px) rotate(3deg); }
+  .shore-prose,
+  .editor-content {
+    font-size: 14px;
+    line-height: 1.85;
+  }
 }

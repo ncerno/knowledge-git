@@ -34,16 +34,16 @@ export default function SyncRadar({ data }: Props) {
     <div>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[12px] font-medium text-white/60">领域同步率</p>
-          <p className="mt-0.5 font-mono text-[10px] tracking-[0.08em] text-white/30">Domain Sync</p>
+          <p className="text-[13px] font-medium text-white/72">领域同步率</p>
+          <p className="mt-1 text-[12px] leading-5 text-white/42">比较不同领域下的内容沉淀数量。</p>
         </div>
-        <div className="rounded-[8px] border border-white/[0.07] bg-white/[0.03] px-3 py-2 text-right">
+        <div className="rounded-[14px] border border-white/[0.07] bg-white/[0.03] px-3 py-2 text-right">
           <p className="text-[10px] text-white/40">峰值</p>
           <p className="mt-1 text-sm font-semibold text-white/86">{maxVal}</p>
         </div>
       </div>
       <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="mx-auto mt-4 w-full max-w-[190px]">
-        {rings.map((pts, i) => <polygon key={i} points={pts} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth={0.5} />)}
+        {rings.map((pts, i) => <polygon key={i} points={pts} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={0.5} />)}
         {axes.map((a) => <line key={a.key} x1={CENTER} y1={CENTER} x2={a.end.x} y2={a.end.y} stroke="rgba(255,255,255,0.06)" strokeWidth={0.5} />)}
         <path d={dataPath} fill="rgba(34,211,238,0.12)" stroke="rgba(103,232,249,0.72)" strokeWidth={1.5} />
         {axes.map((a) => <circle key={a.key} cx={a.point.x} cy={a.point.y} r={2.5} fill="rgba(103,232,249,0.92)" />)}
@@ -55,7 +55,7 @@ export default function SyncRadar({ data }: Props) {
       </svg>
       <div className="mt-3 grid grid-cols-5 gap-1 text-center">
         {axes.map((a) => (
-          <div key={a.key} className="rounded-[6px] border border-white/[0.05] bg-white/[0.02] px-1 py-2 text-[10px]">
+          <div key={a.key} className="rounded-[10px] border border-white/[0.05] bg-white/[0.02] px-1 py-2 text-[10px]">
             <p className="text-white/35">{a.meta.label.slice(0, 2)}</p>
             <span className="mt-1 block text-cyan-300/58">{data[a.key] || 0}</span>
           </div>
@@ -64,4 +64,3 @@ export default function SyncRadar({ data }: Props) {
     </div>
   );
 }
-

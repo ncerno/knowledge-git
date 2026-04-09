@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Nunito } from "next/font/google";
 import "./globals.css";
 import StarfieldBackground from "@/components/StarfieldBackground";
-import PetalCanvas from "@/components/PetalCanvas";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -33,14 +32,7 @@ export default function RootLayout({
     <html lang="zh-CN" className={`${nunito.variable} ${jetbrainsMono.variable}`}>
       <body className="min-h-screen antialiased">
         <StarfieldBackground />
-        <PetalCanvas />
-        <div
-          className="pointer-events-none fixed inset-0 z-10"
-          style={{
-            background:
-              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,229,255,0.006) 2px, rgba(0,229,255,0.006) 4px)",
-          }}
-        />
+        <div className="pointer-events-none fixed inset-0 z-10 bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.08),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.015),transparent_26%)]" />
         <main className="relative z-20 min-h-screen overflow-x-hidden">
           {children}
         </main>
